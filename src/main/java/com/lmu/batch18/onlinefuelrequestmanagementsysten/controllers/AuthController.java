@@ -1,5 +1,6 @@
 package com.lmu.batch18.onlinefuelrequestmanagementsysten.controllers;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,27 +15,28 @@ import com.lmu.batch18.onlinefuelrequestmanagementsysten.payload.request.LoginRe
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.payload.request.SignupRequest;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.payload.response.JwtResponse;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.payload.response.MessageResponse;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.security.services.UserDetailsServiceImpl;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.util.CommonResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.repository.RoleRepository;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.repository.UserRepository;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.security.jwt.JwtUtils;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.security.services.UserDetailsImpl;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/auth")
+@Slf4j
 public class AuthController {
   @Autowired
   AuthenticationManager authenticationManager;
@@ -50,6 +52,9 @@ public class AuthController {
 
   @Autowired
   JwtUtils jwtUtils;
+
+  @Autowired
+  UserDetailsServiceImpl userDetailsService;
 
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -72,9 +77,24 @@ public class AuthController {
                          roles));
   }
 
+  @PostMapping("/sendOTPMail/{email}")
+  public ResponseEntity<CommonResponse> emailSendForResetPassword(@PathVariable("email") String email){
+    System.out.println("awa:"+email);
+    ResponseEntity<CommonResponse> responseEntity = null;
+    CommonResponse commonResponse = new CommonResponse();
+    try {
+      responseEntity = userDetailsService.sendEmail(email);
+    } catch (Exception ex) {
+      commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
+      commonResponse.setErrorMessages(Collections.singletonList(ex.getMessage()));
+      log.error(ex.getMessage());
+      return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
+    }
+    return responseEntity;
+  }
+
   @PostMapping("/signup")
   public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-    System.out.println("awa");
     if (userRepository.existsByUsername(signUpRequest.getUsername())) {
       return ResponseEntity
           .badRequest()

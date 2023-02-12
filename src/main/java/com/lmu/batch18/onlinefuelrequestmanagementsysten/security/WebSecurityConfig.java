@@ -20,6 +20,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.security.jwt.AuthEntryPointJwt;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.security.jwt.AuthTokenFilter;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.security.services.UserDetailsServiceImpl;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 
 @Configuration
 @EnableGlobalMethodSecurity(
@@ -81,19 +86,49 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 //    http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 //  }
   
+//  @Bean
+//  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//    http.cors().and().csrf().disable()
+//        .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+//        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+//        .authorizeRequests().antMatchers("/api/auth/**").permitAll()
+//        .antMatchers("/api/test/**").permitAll()
+//        .anyRequest().authenticated();
+//
+//    http.authenticationProvider(authenticationProvider());
+//
+//    http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+//
+//    return http.build();
+//  }
+
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.cors().and().csrf().disable()
-        .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-        .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-        .antMatchers("/api/test/**").permitAll()
-        .anyRequest().authenticated();
-    
+    http.
+            securityContext().requireExplicitSave(false)
+            .and().sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+            .cors().configurationSource(new CorsConfigurationSource() {
+              @Override
+              public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                CorsConfiguration config = new CorsConfiguration();
+                config.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+                config.setAllowedMethods(Collections.singletonList("*"));
+                config.setAllowCredentials(true);
+                config.setAllowedHeaders(Collections.singletonList("*"));
+                config.setMaxAge(3600L);
+                return config;
+              }}).and().csrf().disable()
+            .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+            .authorizeRequests().antMatchers("/api/auth/**").permitAll()
+            .antMatchers("/api/test/**").permitAll()
+            .anyRequest().authenticated();
+
     http.authenticationProvider(authenticationProvider());
 
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-    
+
     return http.build();
   }
+
 }
