@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -13,11 +14,15 @@ public interface VehicleRepository extends JpaRepository<Vehicle,Long> {
     Vehicle findByVehicleNumber(String vehicleNumber);
 
     @Query(
-            value = "select * from vehicle order by CASE WHEN updated_date > created_date THEN updated_date\n" +
+            value = "select * from vehicle where user_id=?1 order by CASE WHEN updated_date > created_date THEN updated_date\n" +
                     "        ELSE created_date\n" +
-                    "   END  desc",
+                    "   END  desc ",
             nativeQuery = true
     )
     @Transactional
-    List<Vehicle> findAllDetails();
+    List<Vehicle> findByUserId(String userId);
+
+    Vehicle findByChassisNumber(String chassisNumber);
+
+
 }

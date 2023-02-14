@@ -19,7 +19,7 @@ public class VehicleDTO {
     private String fuelType;
     private String createdBy;
 
-//    private User userId;
+    private String userId;
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private Date createdDate;

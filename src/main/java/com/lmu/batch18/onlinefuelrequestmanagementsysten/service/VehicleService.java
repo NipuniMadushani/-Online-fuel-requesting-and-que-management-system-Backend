@@ -9,11 +9,13 @@ import java.util.List;
 public interface VehicleService {
     ResponseEntity<CommonResponse> registerVehicle(VehicleDTO vehicleDTO);
 
-    List<VehicleDTO> getAllRegisteredVehicles();
+    List<VehicleDTO> getAllRegisteredVehicles(String userId);
 
     ResponseEntity<CommonResponse> getVehicleById(Long id);
 
     ResponseEntity<CommonResponse> updateVehicle(Long id, VehicleDTO vehicleDTO);
 
     ResponseEntity<CommonResponse> checkVehicleByVehicleNumber(String vehicleNumber);
+
+    ResponseEntity<CommonResponse> checkVehicleByChassisNumber(String chassisNumber);
 }

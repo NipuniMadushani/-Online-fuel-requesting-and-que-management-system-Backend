@@ -53,8 +53,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     //send an email with template
     EmailDTO mail = new EmailDTO();
     Map<String, Object> model = new HashMap<>();
-    model.put("firstName", "Yuneth");
-    model.put("lastName", "Anjana");
+    model.put("firstName", "Iresha");
+    model.put("lastName", "Dolawatha");
     model.put("verificationCode", randomPwd);
     model.put("uri", passwordResetUri);
 

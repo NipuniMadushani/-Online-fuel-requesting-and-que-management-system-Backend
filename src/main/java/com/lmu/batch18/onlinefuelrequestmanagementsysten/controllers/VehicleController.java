@@ -36,11 +36,12 @@ public class VehicleController {
         }
     }
 
-    @GetMapping("/")
-    public ResponseEntity<CommonResponse> getAllRegisteredVehicles() {
+    @GetMapping("allRegistered/{userId}")
+    public ResponseEntity<CommonResponse> getAllRegisteredVehicles(@PathVariable("userId") String userId) {
+        System.out.println(userId);
         CommonResponse commonResponse = new CommonResponse();
         try {
-            List<VehicleDTO>vehicleDTOS = vehicleService.getAllRegisteredVehicles();
+            List<VehicleDTO>vehicleDTOS = vehicleService.getAllRegisteredVehicles(userId);
             commonResponse.setPayload(Collections.singletonList(vehicleDTOS));
             return new ResponseEntity<>(commonResponse, HttpStatus.OK);
         } catch (Exception e) {
@@ -52,8 +53,8 @@ public class VehicleController {
         }
     }
 
-    @GetMapping("/vehicleDuplicate/{vehicleNumber}")
-    public ResponseEntity<CommonResponse> checkExpenseRatesByCode(@PathVariable("vehicleNumber") String vehicleNumber){
+    @GetMapping("/vehicleNumberDuplicate/{vehicleNumber}")
+    public ResponseEntity<CommonResponse> checkVehicleByVehicleNumber(@PathVariable("vehicleNumber") String vehicleNumber){
         CommonResponse commonResponse = new CommonResponse();
         ResponseEntity<CommonResponse> responseEntity = null;
         try{
@@ -67,8 +68,24 @@ public class VehicleController {
         return responseEntity;
     }
 
+    @GetMapping("/chassisNumberDuplicate/{chassisNumber}")
+    public ResponseEntity<CommonResponse> checkVehicleByChassisNumber(@PathVariable("chassisNumber") String chassisNumber){
+        CommonResponse commonResponse = new CommonResponse();
+        ResponseEntity<CommonResponse> responseEntity = null;
+        try{
+            responseEntity = vehicleService.checkVehicleByChassisNumber(chassisNumber);
+        }catch (Exception ex){
+            commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
+            commonResponse.setErrorMessages(Collections.singletonList(ex.getMessage()));
+            log.error(ex.getMessage());
+            return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
+        }
+        return responseEntity;
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<CommonResponse> getVehicleById(@PathVariable("id") Long id) {
+
         ResponseEntity<CommonResponse> responseEntity = null;
         CommonResponse commonResponse = new CommonResponse();
         try {

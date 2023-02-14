@@ -43,9 +43,9 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public List<VehicleDTO> getAllRegisteredVehicles() {
-        return vehicleRepository
-                .findAllDetails().stream()
+    public List<VehicleDTO> getAllRegisteredVehicles(String userId) {
+        System.out.println(userId);
+        return vehicleRepository.findByUserId(userId).stream()
                 .map(vehicle -> new VehicleDTO(vehicle.getId(), vehicle.getVehicleNumber(), vehicle.getChassisNumber(), vehicle.getVehicleType(),vehicle.getFuelType()) {
                 })
                 .collect(Collectors.toList());
@@ -53,16 +53,71 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public ResponseEntity<CommonResponse> getVehicleById(Long id) {
-        return null;
+        CommonResponse commonResponse = new CommonResponse();
+        Vehicle vehicle = vehicleRepository.findById(id).get();
+        if (vehicle==null) {
+            commonResponse.setStatus(CommonConst.EXCEPTION_ERROR);
+            commonResponse.setErrorMessages(Collections.singletonList("Not found Vehicle"));
+            return new ResponseEntity<>(commonResponse, HttpStatus.NOT_FOUND);
+        }
+
+        VehicleDTO vehicleDTO = new ObjectMapper().convertValue(vehicle,VehicleDTO.class);
+        System.out.println("vehicleDTO:"+vehicleDTO);
+        commonResponse.setStatus(1);
+        commonResponse.setPayload(Collections.singletonList(vehicleDTO));
+        return new ResponseEntity<>(commonResponse, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<CommonResponse> updateVehicle(Long id, VehicleDTO vehicleDTO) {
-        return null;
+        CommonResponse commonResponse = new CommonResponse();
+        Vehicle vehicle = vehicleRepository.findById(id).get();
+        if (vehicle==null) {
+            commonResponse.setStatus(CommonConst.EXCEPTION_ERROR);
+            commonResponse.setErrorMessages(Collections.singletonList("Not found Vehicle"));
+            return new ResponseEntity<>(commonResponse, HttpStatus.NOT_FOUND);
+        }
+
+        Vehicle vehicle1 = vehicleRepository.save(new Vehicle(
+                vehicle.getId(),
+                vehicleDTO.getVehicleNumber(),
+                vehicleDTO.getChassisNumber(),
+                vehicleDTO.getVehicleType(),
+                vehicleDTO.getFuelType(),
+                vehicle.getCreatedBy(),
+                vehicle.getUserId(),
+                vehicle.getCreatedDate(),
+                vehicleDTO.getModifiedBy(),
+                new Date()
+        ));
+        commonResponse.setPayload(Collections.singletonList(vehicle1));
+        commonResponse.setStatus(1);
+        return new ResponseEntity<>(commonResponse, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<CommonResponse> checkVehicleByVehicleNumber(String vehicleNumber) {
-        return null;
+        CommonResponse commonResponse = new CommonResponse();
+        Vehicle vehicleNumberExist = vehicleRepository.findByVehicleNumber(vehicleNumber);
+        if (vehicleNumberExist == null) {
+            commonResponse.setStatus(404);
+            return new ResponseEntity<>(commonResponse, HttpStatus.NOT_FOUND);
+        }
+        commonResponse.setErrorMessages(Collections.singletonList("Vehicle Number Already Exist."));
+        commonResponse.setStatus(CommonConst.SUCCESS_CODE);
+        return new ResponseEntity<>(commonResponse, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<CommonResponse> checkVehicleByChassisNumber(String chassisNumber) {
+        CommonResponse commonResponse = new CommonResponse();
+        Vehicle vehicleNumberExist = vehicleRepository.findByChassisNumber(chassisNumber);
+        if (vehicleNumberExist == null) {
+            commonResponse.setStatus(404);
+            return new ResponseEntity<>(commonResponse, HttpStatus.NOT_FOUND);
+        }
+        commonResponse.setErrorMessages(Collections.singletonList("Chassis Number Already Exist."));
+        commonResponse.setStatus(CommonConst.SUCCESS_CODE);
+        return new ResponseEntity<>(commonResponse, HttpStatus.OK);
     }
 }

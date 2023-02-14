@@ -23,6 +23,7 @@ public class Vehicle {
 //    @ManyToOne
 //    @JoinColumn(name = "user_id")
 //    private  User userId;
+    private String userId;
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private Date createdDate;
