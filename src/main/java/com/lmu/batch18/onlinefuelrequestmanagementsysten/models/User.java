@@ -16,8 +16,8 @@ import javax.validation.constraints.Size;
     })
 public class User {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private int id;
 
   @NotBlank
   @Size(max = 20)
@@ -38,7 +38,21 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
 
+  @OneToOne(mappedBy = "user")
+  private Customer customer;
+
+  @OneToOne(mappedBy = "user")
+  private FuelStation fuelStation;
+
   public User() {
+  }
+
+  public User(int id, String username, String email, String password, Set<Role> roles) {
+    this.id = id;
+    this.username = username;
+    this.email = email;
+    this.password = password;
+    this.roles = roles;
   }
 
   public User(String username, String email, String password) {
@@ -47,11 +61,11 @@ public class User {
     this.password = password;
   }
 
-  public Long getId() {
+  public int getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(int id) {
     this.id = id;
   }
 

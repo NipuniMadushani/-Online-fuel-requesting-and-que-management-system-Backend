@@ -14,7 +14,7 @@ import java.util.Date;
 public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
     private String vehicleNumber;
     private String chassisNumber;
     private String vehicleType;
