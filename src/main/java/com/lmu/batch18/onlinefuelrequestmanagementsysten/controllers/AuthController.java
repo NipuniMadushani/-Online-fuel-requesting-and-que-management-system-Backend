@@ -79,7 +79,7 @@ public class AuthController {
 
   @PostMapping("/sendOTPMail/{email}")
   public ResponseEntity<CommonResponse> emailSendForResetPassword(@PathVariable("email") String email){
-    System.out.println("awa:"+email);
+
     ResponseEntity<CommonResponse> responseEntity = null;
     CommonResponse commonResponse = new CommonResponse();
     try {

@@ -41,10 +41,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   }
 
   public ResponseEntity<CommonResponse> sendEmail(String email) {
-    System.out.println("USer service impl");
+
     CommonResponse commonResponse = new CommonResponse();
     String randomPwd = randomPasswordGenerator.generatePassayPassword();
-    System.out.println(randomPwd);
+
 
     //send an email
         /*emailService.sendEmail(user.getEmail(),"Verification Code",
