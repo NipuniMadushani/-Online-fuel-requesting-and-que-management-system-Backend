@@ -29,7 +29,7 @@ public class FuelStation {
     private boolean activeState;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "created_user_id", referencedColumnName = "id")
     private User user;
 
     @JsonIgnore

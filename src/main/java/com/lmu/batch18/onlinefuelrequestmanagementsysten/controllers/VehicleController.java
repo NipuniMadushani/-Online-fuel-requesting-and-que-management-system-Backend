@@ -36,7 +36,7 @@ public class VehicleController {
         }
     }
 
-    @GetMapping("allRegistered/{userId}")
+    @GetMapping("/allRegistered/{userId}")
     public ResponseEntity<CommonResponse> getAllRegisteredVehicles(@PathVariable("userId") String userId) {
         System.out.println(userId);
         CommonResponse commonResponse = new CommonResponse();

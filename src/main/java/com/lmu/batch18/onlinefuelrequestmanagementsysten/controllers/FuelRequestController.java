@@ -2,7 +2,6 @@ package com.lmu.batch18.onlinefuelrequestmanagementsysten.controllers;
 
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.CustomerDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.FuelRequestDTO;
-import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.FuelStationDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.service.CustomerService;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.service.FuelRequestService;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.util.CommonResponse;

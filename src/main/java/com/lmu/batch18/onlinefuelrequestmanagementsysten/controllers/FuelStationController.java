@@ -53,7 +53,7 @@ public class FuelStationController {
         }
     }
 
-    @GetMapping("all-fuel-stations")
+    @GetMapping("/allFillingStations")
     public ResponseEntity<CommonResponse> allFuelStations() {
         CommonResponse commonResponse = new CommonResponse();
         try {

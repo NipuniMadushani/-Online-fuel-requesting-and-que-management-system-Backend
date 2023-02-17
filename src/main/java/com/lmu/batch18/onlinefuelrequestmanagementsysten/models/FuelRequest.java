@@ -40,6 +40,7 @@ public class FuelRequest {
     @Column(name = "actual_quata",length = 100)
     private Double actualQuata;
 
+    //should be vehicle id
     @Column(name = "vehicleType",length = 100)
     private String vehicleType;
 
