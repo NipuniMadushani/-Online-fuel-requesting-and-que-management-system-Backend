@@ -37,6 +37,11 @@ public class FuelStation {
     private Set<FuelRequest> fuelRequest;
 
 
+    @JsonIgnore
+    @OneToMany(mappedBy="customer")
+    private Set<FuelRequestHistory> fuelRequestHistory;
+
+
 
 
 

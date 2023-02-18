@@ -11,9 +11,9 @@ public interface VehicleService {
 
     List<VehicleDTO> getAllRegisteredVehicles(String userId);
 
-    ResponseEntity<CommonResponse> getVehicleById(Long id);
+    ResponseEntity<CommonResponse> getVehicleById(int id);
 
-    ResponseEntity<CommonResponse> updateVehicle(Long id, VehicleDTO vehicleDTO);
+    ResponseEntity<CommonResponse> updateVehicle(int id, VehicleDTO vehicleDTO);
 
     ResponseEntity<CommonResponse> checkVehicleByVehicleNumber(String vehicleNumber);
 

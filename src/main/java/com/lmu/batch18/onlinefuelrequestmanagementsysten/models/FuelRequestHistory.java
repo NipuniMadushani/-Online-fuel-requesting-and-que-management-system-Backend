@@ -9,13 +9,13 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "fuel_request")
+@Table(name = "fuel_request_history")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class FuelRequest {
+public class FuelRequestHistory {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     @Column(name = "fuel_amount",length = 100)
@@ -55,12 +55,5 @@ public class FuelRequest {
     @ManyToOne
     @JoinColumn(name="vehicle_id", nullable=false)
     private Vehicle vehicle;
-
-
-
-
-
-
-
 
 }

@@ -86,6 +86,7 @@ public class FuelStationServiceIMPL implements FuelStationService {
                 fuelStationDTO.getLocation(),
                 fuelStation.isActiveState(),
                 fuelStation.getUser(),
+                null,
                 null
         ));
         commonResponse.setPayload(Collections.singletonList(fuelStation1));

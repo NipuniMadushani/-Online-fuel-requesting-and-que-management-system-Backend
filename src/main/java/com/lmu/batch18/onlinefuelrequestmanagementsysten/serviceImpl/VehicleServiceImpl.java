@@ -52,7 +52,7 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public ResponseEntity<CommonResponse> getVehicleById(Long id) {
+    public ResponseEntity<CommonResponse> getVehicleById(int id) {
         CommonResponse commonResponse = new CommonResponse();
         Vehicle vehicle = vehicleRepository.findById(id).get();
         if (vehicle==null) {
@@ -69,7 +69,7 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public ResponseEntity<CommonResponse> updateVehicle(Long id, VehicleDTO vehicleDTO) {
+    public ResponseEntity<CommonResponse> updateVehicle(int id, VehicleDTO vehicleDTO) {
         CommonResponse commonResponse = new CommonResponse();
         Vehicle vehicle = vehicleRepository.findById(id).get();
         if (vehicle==null) {
@@ -88,7 +88,9 @@ public class VehicleServiceImpl implements VehicleService {
                 vehicle.getUserId(),
                 vehicle.getCreatedDate(),
                 vehicleDTO.getModifiedBy(),
-                new Date()
+                new Date(),
+                null,
+                null
         ));
         commonResponse.setPayload(Collections.singletonList(vehicle1));
         commonResponse.setStatus(1);

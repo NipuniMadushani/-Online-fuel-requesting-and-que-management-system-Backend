@@ -1,13 +1,11 @@
 package com.lmu.batch18.onlinefuelrequestmanagementsysten.serviceImpl;
 
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.FuelRequestDTO;
-import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.Customer;
-import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.FuelRequest;
-import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.FuelStation;
-import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.User;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.*;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.repository.CustomerRepository;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.repository.FuelRequestRepository;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.repository.FuelStationRepository;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.repository.VehicleRepository;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.service.FuelRequestService;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.util.CommonConst;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.util.CommonResponse;
@@ -36,11 +34,15 @@ public class FuelRequestServiceIMPL implements FuelRequestService {
     @Autowired
     private FuelStationRepository fuelStationRepository;
 
+    @Autowired
+    private VehicleRepository vehicleRepository;
+
     @Override
     public ResponseEntity<CommonResponse> saveFuelRequest(FuelRequestDTO fuelRequestDTO) {
         CommonResponse commonResponse = new CommonResponse();
         Customer customer = customerRepository.findById(fuelRequestDTO.getCustomerId()).get();
         FuelStation fuelStation = fuelStationRepository.findById(fuelRequestDTO.getFuelStationId()).get();
+        Vehicle vehicle = vehicleRepository.findById(fuelRequestDTO.getVehicleId()).get();
         if (customer == null) {
             commonResponse.setStatus(CommonConst.EXCEPTION_ERROR);
             commonResponse.setErrorMessages(Collections.singletonList("Not found customer"));
@@ -51,8 +53,14 @@ public class FuelRequestServiceIMPL implements FuelRequestService {
             commonResponse.setErrorMessages(Collections.singletonList("Not found fuel station"));
             return new ResponseEntity<>(commonResponse, HttpStatus.NOT_FOUND);
         }
+        if(vehicle == null){
+            commonResponse.setStatus(CommonConst.EXCEPTION_ERROR);
+            commonResponse.setErrorMessages(Collections.singletonList("Not found vehicle"));
+            return new ResponseEntity<>(commonResponse, HttpStatus.NOT_FOUND);
+        }
         fuelRequestDTO.setCustomer(customer);
         fuelRequestDTO.setFuelStation(fuelStation);
+        fuelRequestDTO.setVehicle(vehicle);
         FuelRequest fuelRequest = modelMapper.map(fuelRequestDTO, FuelRequest.class);
 
         fuelRequestRepository.save(fuelRequest);

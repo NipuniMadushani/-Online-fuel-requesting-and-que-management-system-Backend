@@ -1,11 +1,13 @@
 package com.lmu.batch18.onlinefuelrequestmanagementsysten.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -32,6 +34,14 @@ public class Vehicle {
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private Date updatedDate;
+
+    @JsonIgnore
+    @OneToMany(mappedBy="vehicle")
+    private Set<FuelRequest> fuelRequest;
+
+    @JsonIgnore
+    @OneToMany(mappedBy="vehicle")
+    private Set<FuelRequestHistory> fuelRequestHistory;
 
 
 }
