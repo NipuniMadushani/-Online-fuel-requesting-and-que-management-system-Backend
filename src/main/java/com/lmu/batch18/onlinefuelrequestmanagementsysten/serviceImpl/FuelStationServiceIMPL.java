@@ -1,12 +1,18 @@
 package com.lmu.batch18.onlinefuelrequestmanagementsysten.serviceImpl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.controllers.AuthController;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.CustomerDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.FuelStationDTO;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.VehicleDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.Customer;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.FuelStation;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.User;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.Vehicle;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.payload.request.SignupRequest;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.repository.FuelStationRepository;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.repository.UserRepository;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.security.services.UserDetailsServiceImpl;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.service.FuelStationService;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.util.CommonConst;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.util.CommonResponse;
@@ -29,23 +35,42 @@ public class FuelStationServiceIMPL implements FuelStationService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
+    AuthController authController;
+
     Map<String, Object> response = new HashMap<>();
+
     @Override
     public ResponseEntity<CommonResponse> saveFuelStation(FuelStationDTO fuelStationDTO) {
         CommonResponse commonResponse = new CommonResponse();
-        User user = userRepository.getReferenceById(fuelStationDTO.getUserId());
-        FuelStation fuelStation = fuelStationRepository.findByUserEquals(user);
+        FuelStation fuelStation = fuelStationRepository.findByDisplayName(fuelStationDTO.getDisplayName());
+//        FuelStation fuelStation = fuelStationRepository.findByUserEquals(user);
         response.clear();
         if (fuelStation != null) {
-            commonResponse.setErrorMessages(Collections.singletonList("User Id Already Exists."));
+            commonResponse.setErrorMessages(Collections.singletonList("Fuel Station Name Already Exists."));
             commonResponse.setStatus(CommonConst.CONFLICT);
             return new ResponseEntity<>(commonResponse, HttpStatus.CONFLICT);
         } else {
-            fuelStationDTO.setUser(user);
+            fuelStationDTO.setCreatedDate(new Date());
+//            fuelStationDTO.setUser(user);
             FuelStation fuelStation1 = modelMapper.map(fuelStationDTO, FuelStation.class);
             //customer.setUser(user);
             FuelStation fuelStationSaved = fuelStationRepository.save(fuelStation1);
-            response.put("Vehicle", fuelStationSaved);
+            response.put("FuelStation", fuelStationSaved);
+            if (fuelStationSaved != null) {
+                String randomPassword = userDetailsService.sendEmailOTP(fuelStationSaved);
+                System.out.println(randomPassword);
+                SignupRequest signupRequest = new SignupRequest();
+                signupRequest.setUsername(fuelStation1.getManagerFirstName());
+                signupRequest.setEmail(fuelStation1.getManagerEmail());
+                signupRequest.setRole(Collections.singleton("fuelstationadmin"));
+                signupRequest.setPassword(randomPassword);
+//    userRepository.save(signupRequest);
+                authController.registerUser(signupRequest);
+            }
             commonResponse.setPayload(Arrays.asList(response));
             commonResponse.setStatus(CommonConst.CREATED);
             return new ResponseEntity<>(commonResponse, HttpStatus.CREATED);
@@ -54,11 +79,11 @@ public class FuelStationServiceIMPL implements FuelStationService {
 
     @Override
     public FuelStationDTO getFuelStationByUserId(int userId) {
-        User u = new User();
-        u.setId(userId);
-        FuelStation fuelStation = fuelStationRepository.findByUserEquals(u);
-        FuelStationDTO c = modelMapper.map(fuelStation, FuelStationDTO.class);
-        return c;
+//        User u = new User();
+//        u.setId(userId);
+//        FuelStation fuelStation = fuelStationRepository.findByUserEquals(u);
+//        FuelStationDTO c = modelMapper.map(fuelStation, FuelStationDTO.class);
+        return null;
     }
 
     @Override
@@ -74,22 +99,38 @@ public class FuelStationServiceIMPL implements FuelStationService {
     public ResponseEntity<CommonResponse> updateFuelStation(int id, FuelStationDTO fuelStationDTO) {
         CommonResponse commonResponse = new CommonResponse();
         FuelStation fuelStation = fuelStationRepository.findById(id).get();
-        if (fuelStation==null) {
+        if (fuelStation == null) {
             commonResponse.setStatus(CommonConst.EXCEPTION_ERROR);
-            commonResponse.setErrorMessages(Collections.singletonList("Not found "));
+            commonResponse.setErrorMessages(Collections.singletonList("Not found Fuel Station "));
             return new ResponseEntity<>(commonResponse, HttpStatus.NOT_FOUND);
         }
 
-        FuelStation fuelStation1 = fuelStationRepository.save(new FuelStation(
-                fuelStation.getId(),
-                fuelStationDTO.getName(),
-                fuelStationDTO.getLocation(),
-                fuelStation.isActiveState(),
-                fuelStation.getUser(),
-                null
-        ));
-        commonResponse.setPayload(Collections.singletonList(fuelStation1));
+        fuelStationDTO.setCreatedDate(new Date());
+//            fuelStationDTO.setUser(user);
+        FuelStation fuelStation1 = modelMapper.map(fuelStationDTO, FuelStation.class);
+        fuelStation1.setId(fuelStationDTO.getId());
+        FuelStation fuelStationSaved = fuelStationRepository.save(fuelStation1);
+        response.put("FuelStation", fuelStationSaved);
+
+        commonResponse.setPayload(Collections.singletonList(fuelStationSaved));
         commonResponse.setStatus(1);
+        return new ResponseEntity<>(commonResponse, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<CommonResponse> getFuelStationById(int id) {
+        CommonResponse commonResponse = new CommonResponse();
+        FuelStation fuelStation = fuelStationRepository.findById(id).get();
+        if (fuelStation == null) {
+            commonResponse.setStatus(CommonConst.EXCEPTION_ERROR);
+            commonResponse.setErrorMessages(Collections.singletonList("Not found Vehicle"));
+            return new ResponseEntity<>(commonResponse, HttpStatus.NOT_FOUND);
+        }
+
+        FuelStationDTO fuelStationDTO = new ObjectMapper().convertValue(fuelStation, FuelStationDTO.class);
+        System.out.println("fuelStation:" + fuelStationDTO);
+        commonResponse.setStatus(1);
+        commonResponse.setPayload(Collections.singletonList(fuelStationDTO));
         return new ResponseEntity<>(commonResponse, HttpStatus.OK);
     }
 

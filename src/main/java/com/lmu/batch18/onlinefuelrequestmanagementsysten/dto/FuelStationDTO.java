@@ -1,39 +1,45 @@
 package com.lmu.batch18.onlinefuelrequestmanagementsysten.dto;
 
-import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class FuelStationDTO {
     private int id;
-    private String name;
+    private String ownerName;
+
+    private String displayName;
+
+    private String nearByTown;
     private String location;
     private boolean activeState;
-    private User user;
-    private int userId;
 
-    public FuelStationDTO(int id, String name, String location, boolean activeState, User user) {
-        this.id = id;
-        this.name = name;
-        this.location = location;
-        this.activeState = activeState;
-        this.user = user;
-    }
+    private String managerFirstName;
+    private String managerLastName;
+    private String managerEmail;
+    private String managerContactNumber;
 
-    public FuelStationDTO(int id, String name, String location, boolean activeState, int userId) {
-        this.id = id;
-        this.name = name;
-        this.location = location;
-        this.activeState = activeState;
-        this.userId = userId;
-    }
+    private Double petrolStock;
+
+    private Double remainingPetrolStock;
+
+    private Double dieselStock;
+
+    private Double remainingDieselStock;
+
+    private int createdBy;
+
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    private Date createdDate;
+
+    private String modifiedBy;
+
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    private Date updatedDate;
 }

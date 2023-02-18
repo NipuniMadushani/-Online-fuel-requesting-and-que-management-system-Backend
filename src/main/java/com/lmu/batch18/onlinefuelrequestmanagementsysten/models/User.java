@@ -41,8 +41,8 @@ public class User {
   @OneToOne(mappedBy = "user")
   private Customer customer;
 
-  @OneToOne(mappedBy = "user")
-  private FuelStation fuelStation;
+//  @OneToOne(mappedBy = "user")
+//  private FuelStation fuelStation;
 
   public User() {
   }

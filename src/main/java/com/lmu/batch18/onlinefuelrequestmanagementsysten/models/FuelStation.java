@@ -1,11 +1,13 @@
 package com.lmu.batch18.onlinefuelrequestmanagementsysten.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -19,22 +21,39 @@ public class FuelStation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Column(name = "name",length = 100)
-    private String name;
+    @Column(length = 100)
+    private String ownerName;
 
-    @Column(name = "location",length = 100)
+    @Column(length = 100)
+    private String displayName;
+    private String nearByTown;
     private String location;
-
     @Column(name = "active_state",columnDefinition = "TINYINT default 1")
     private boolean activeState;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "created_user_id", referencedColumnName = "id")
-    private User user;
+    private String managerFirstName;
+    private String managerLastName;
+    private String managerEmail;
+    private String managerContactNumber;
+    private Double petrolStock;
+
+    private Double remainingPetrolStock;
+
+    private Double dieselStock;
+
+    private Double remainingDieselStock;
+    private int createdBy;
+
 
     @JsonIgnore
     @OneToMany(mappedBy="fuelStation")
     private Set<FuelRequest> fuelRequest;
+
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    private Date createdDate;
+
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    private Date updatedDate;
 
 
 

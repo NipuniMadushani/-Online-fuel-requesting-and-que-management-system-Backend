@@ -14,4 +14,6 @@ public interface FuelStationService {
     List<FuelStationDTO> getALlFuelStations();
 
     ResponseEntity<CommonResponse> updateFuelStation(int id, FuelStationDTO fuelStationDTO);
+
+    ResponseEntity<CommonResponse> getFuelStationById(int id);
 }

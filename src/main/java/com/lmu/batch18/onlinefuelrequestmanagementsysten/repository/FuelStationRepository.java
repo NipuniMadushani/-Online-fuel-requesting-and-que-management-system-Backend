@@ -6,7 +6,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FuelStationRepository  extends JpaRepository<FuelStation, Integer> {
-    FuelStation findByUserEquals(User user);
+//    FuelStation findByUserEquals(User user);
+
+    FuelStation findByDisplayName(String displayName);
 }
 
 

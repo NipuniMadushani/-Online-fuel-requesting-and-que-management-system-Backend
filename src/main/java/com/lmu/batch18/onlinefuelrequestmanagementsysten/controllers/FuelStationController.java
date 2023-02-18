@@ -84,4 +84,19 @@ public class FuelStationController {
 
         }
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CommonResponse> getFillingStationsByCode(@PathVariable("id") int id) {
+        ResponseEntity<CommonResponse> responseEntity = null;
+        CommonResponse commonResponse = new CommonResponse();
+        try {
+            responseEntity = fuelStationService.getFuelStationById(id);
+        } catch (Exception ex) {
+            commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
+            commonResponse.setErrorMessages(Collections.singletonList(ex.getMessage()));
+            log.error(ex.getMessage());
+            return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
+        }
+        return responseEntity;
+    }
 }
