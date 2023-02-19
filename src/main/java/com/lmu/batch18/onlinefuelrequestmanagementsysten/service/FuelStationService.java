@@ -16,4 +16,6 @@ public interface FuelStationService {
     ResponseEntity<CommonResponse> updateFuelStation(int id, FuelStationDTO fuelStationDTO);
 
     ResponseEntity<CommonResponse> getFuelStationById(int id);
+
+    ResponseEntity<CommonResponse> getFillingStationDetailsManagerWise(String userName);
 }

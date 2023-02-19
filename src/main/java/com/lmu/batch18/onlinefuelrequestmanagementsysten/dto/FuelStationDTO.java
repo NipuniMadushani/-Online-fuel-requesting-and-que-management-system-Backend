@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Date;
 
 @Data
@@ -25,13 +27,13 @@ public class FuelStationDTO {
     private String managerEmail;
     private String managerContactNumber;
 
-    private Double petrolStock;
+    private Integer petrolStock;
 
-    private Double remainingPetrolStock;
+    private Integer remainingPetrolStock;
 
-    private Double dieselStock;
+    private Integer dieselStock;
 
-    private Double remainingDieselStock;
+    private Integer remainingDieselStock;
 
     private int createdBy;
 

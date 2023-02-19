@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Date;
 import java.util.Set;
 
@@ -35,13 +36,15 @@ public class FuelStation {
     private String managerLastName;
     private String managerEmail;
     private String managerContactNumber;
-    private Double petrolStock;
 
-    private Double remainingPetrolStock;
 
-    private Double dieselStock;
+    private Integer petrolStock;
 
-    private Double remainingDieselStock;
+    private Integer remainingPetrolStock;
+
+    private Integer dieselStock;
+
+    private Integer remainingDieselStock;
     private int createdBy;
 
 

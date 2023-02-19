@@ -9,6 +9,8 @@ public interface FuelStationRepository  extends JpaRepository<FuelStation, Integ
 //    FuelStation findByUserEquals(User user);
 
     FuelStation findByDisplayName(String displayName);
+
+    FuelStation findByManagerFirstName(String userName);
 }
 
 

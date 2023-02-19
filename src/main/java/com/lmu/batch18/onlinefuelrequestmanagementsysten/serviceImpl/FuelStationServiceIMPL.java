@@ -2,13 +2,8 @@ package com.lmu.batch18.onlinefuelrequestmanagementsysten.serviceImpl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.controllers.AuthController;
-import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.CustomerDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.FuelStationDTO;
-import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.VehicleDTO;
-import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.Customer;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.FuelStation;
-import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.User;
-import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.Vehicle;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.payload.request.SignupRequest;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.repository.FuelStationRepository;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.repository.UserRepository;
@@ -121,6 +116,23 @@ public class FuelStationServiceIMPL implements FuelStationService {
     public ResponseEntity<CommonResponse> getFuelStationById(int id) {
         CommonResponse commonResponse = new CommonResponse();
         FuelStation fuelStation = fuelStationRepository.findById(id).get();
+        if (fuelStation == null) {
+            commonResponse.setStatus(CommonConst.EXCEPTION_ERROR);
+            commonResponse.setErrorMessages(Collections.singletonList("Not found Vehicle"));
+            return new ResponseEntity<>(commonResponse, HttpStatus.NOT_FOUND);
+        }
+
+        FuelStationDTO fuelStationDTO = new ObjectMapper().convertValue(fuelStation, FuelStationDTO.class);
+        System.out.println("fuelStation:" + fuelStationDTO);
+        commonResponse.setStatus(1);
+        commonResponse.setPayload(Collections.singletonList(fuelStationDTO));
+        return new ResponseEntity<>(commonResponse, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<CommonResponse> getFillingStationDetailsManagerWise(String userName) {
+        CommonResponse commonResponse = new CommonResponse();
+        FuelStation fuelStation = fuelStationRepository.findByManagerFirstName(userName);
         if (fuelStation == null) {
             commonResponse.setStatus(CommonConst.EXCEPTION_ERROR);
             commonResponse.setErrorMessages(Collections.singletonList("Not found Vehicle"));

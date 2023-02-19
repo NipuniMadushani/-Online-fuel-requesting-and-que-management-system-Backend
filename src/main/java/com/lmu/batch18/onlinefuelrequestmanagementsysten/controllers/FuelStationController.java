@@ -2,6 +2,7 @@ package com.lmu.batch18.onlinefuelrequestmanagementsysten.controllers;
 
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.CustomerDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.FuelStationDTO;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.repository.RoleRepository;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.service.FuelStationService;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.util.CommonResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,8 @@ import java.util.List;
 @CrossOrigin("*")
 @Slf4j
 public class FuelStationController {
+    @Autowired
+    private RoleRepository roleRepository;
     @Autowired
     private FuelStationService fuelStationService;
 
@@ -52,6 +55,22 @@ public class FuelStationController {
             return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
         }
     }
+
+//    @GetMapping("/manager/{userName}")
+//    public ResponseEntity<CommonResponse> getFillingStationDetailsManagerWise(@PathVariable("userName") String  userName) {
+//        CommonResponse commonResponse = new CommonResponse();
+//        try {
+//            responseEntity= fuelStationService.getFillingStationDetailsManagerWise(userName);
+//            commonResponse.setPayload(Collections.singletonList(fuelStationDTO));
+//            return new ResponseEntity<>(commonResponse, HttpStatus.OK);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
+//            commonResponse.setErrorMessages(Collections.singletonList(e.getMessage()));
+//            log.error(e.getMessage());
+//            return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
+//        }
+//    }
 
     @GetMapping("/allFillingStations")
     public ResponseEntity<CommonResponse> allFuelStations() {
@@ -95,6 +114,23 @@ public class FuelStationController {
             commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
             commonResponse.setErrorMessages(Collections.singletonList(ex.getMessage()));
             log.error(ex.getMessage());
+            return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
+        }
+        return responseEntity;
+    }
+
+    @GetMapping("/manager/{userName}")
+    public ResponseEntity<CommonResponse> getFillingStationDetailsManagerWise(@PathVariable("userName") String  userName) {
+        ResponseEntity<CommonResponse> responseEntity = null;
+        CommonResponse commonResponse = new CommonResponse();
+        try {
+            responseEntity= fuelStationService.getFillingStationDetailsManagerWise(userName);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
+            commonResponse.setErrorMessages(Collections.singletonList(e.getMessage()));
+            log.error(e.getMessage());
             return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
         }
         return responseEntity;
