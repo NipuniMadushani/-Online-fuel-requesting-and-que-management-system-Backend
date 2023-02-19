@@ -59,6 +59,11 @@ public class FuelStation {
     private Date updatedDate;
 
 
+    @JsonIgnore
+    @OneToMany(mappedBy="customer")
+    private Set<FuelRequestHistory> fuelRequestHistory;
+
+
 
 
 

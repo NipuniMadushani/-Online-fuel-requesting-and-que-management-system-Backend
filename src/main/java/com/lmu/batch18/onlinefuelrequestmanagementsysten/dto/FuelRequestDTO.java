@@ -2,6 +2,7 @@ package com.lmu.batch18.onlinefuelrequestmanagementsysten.dto;
 
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.Customer;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.FuelStation;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.Vehicle;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,9 +23,9 @@ public class FuelRequestDTO {
     private String vehicleType;
     private Customer customer;
     private FuelStation fuelStation;
+    private Vehicle vehicle;
     private int customerId;
     private int fuelStationId;
-
-
+    private int vehicleId;
 
 }

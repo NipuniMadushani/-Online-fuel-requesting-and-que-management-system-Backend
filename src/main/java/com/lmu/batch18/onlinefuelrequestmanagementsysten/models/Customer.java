@@ -45,6 +45,10 @@ public class Customer {
     @OneToMany(mappedBy="customer")
     private Set<FuelRequest> fuelRequest;
 
+    @JsonIgnore
+    @OneToMany(mappedBy="customer")
+    private Set<FuelRequestHistory> fuelRequestHistory;
+
 
 
 
