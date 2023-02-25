@@ -134,4 +134,13 @@ public class FuelRequestServiceIMPL implements FuelRequestService {
         }
         return new ResponseEntity<>(commonResponse, HttpStatus.OK);
     }
+
+    @Override
+    public String deleteFuelRequest(int requestId) {
+        if(fuelRequestRepository.existsById(requestId)){
+            fuelRequestRepository.deleteById(requestId);
+            return "deleted successfully "+ requestId;
+        }
+        throw new RuntimeException("no data found for that id");
+    }
 }

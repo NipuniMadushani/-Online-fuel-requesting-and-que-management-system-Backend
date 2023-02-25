@@ -192,6 +192,14 @@ public class FuelRequestController {
         return responseEntity;
     }
 
+    @DeleteMapping(
+            path = "delete-by-id/{id}"
+    )
+    public String deleteRequest(@PathVariable(value = "id") int requestId) {
+        String deleted = fuelRequestService.deleteFuelRequest(requestId);
+        return deleted;
+    }
+
 
 
 }

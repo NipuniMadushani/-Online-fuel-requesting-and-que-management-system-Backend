@@ -18,4 +18,6 @@ public interface FuelRequestService {
     List<FuelRequestDTO> findAllFuelRequst();
 
     ResponseEntity<CommonResponse> getlastModifiedDate(int customerId);
+
+    String deleteFuelRequest(int requestId);
 }
