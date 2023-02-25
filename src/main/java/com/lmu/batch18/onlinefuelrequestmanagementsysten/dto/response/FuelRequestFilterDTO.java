@@ -2,6 +2,7 @@ package com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.response;
 
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.Customer;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.FuelStation;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.Vehicle;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,8 @@ public class FuelRequestFilterDTO {
     private String vehicleType;
     private String fuelType;
     private double pricePerLiter;
+
+    private Vehicle vehicle;
 
 
 }

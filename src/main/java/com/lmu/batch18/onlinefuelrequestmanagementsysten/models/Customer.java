@@ -41,9 +41,9 @@ public class Customer {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @JsonIgnore
-    @OneToMany(mappedBy="customer")
-    private Set<FuelRequest> fuelRequest;
+//    @JsonIgnore
+//    @OneToMany(mappedBy="customer")
+//    private Set<FuelRequest> fuelRequest;
 
     @JsonIgnore
     @OneToMany(mappedBy="customer")

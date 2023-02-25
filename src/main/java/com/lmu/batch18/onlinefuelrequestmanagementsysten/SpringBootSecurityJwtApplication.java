@@ -192,21 +192,21 @@ public class SpringBootSecurityJwtApplication implements CommandLineRunner {
 			fuelPriceRepo.saveAll(fuelPriceList);
 		}
 
-		if(customerRepository.count()<=0){
-
-			Customer customer = new Customer(
-					1,
-					"Gotabaya",
-					"123134131",
-					new Date(),
-					true,
-					"Colombo",
-					userRepository.getReferenceById(2),
-					null,
-					null
-			);
-			customerRepository.save(customer);
-		}
+//		if(customerRepository.count()<=0){
+//
+//			Customer customer = new Customer(
+//					1,
+//					"Gotabaya",
+//					"123134131",
+//					new Date(),
+//					true,
+//					"Colombo",
+//					userRepository.getReferenceById(2),
+//					null,
+//					null
+//			);
+//			customerRepository.save(customer);
+//		}
 
 		if(vehicleRepository.count()<=0){
 			Vehicle vehicle = new Vehicle(
@@ -227,19 +227,19 @@ public class SpringBootSecurityJwtApplication implements CommandLineRunner {
 			vehicleRepository.save(vehicle);
 		}
 
-		if(fuelStationRepository.count()<=0){
-			FuelStation fuelStation = new FuelStation(
-					1,
-					"Colombo Shed",
-					"Colombo",
-					true,
-					userRepository.getReferenceById(2),
-					null,
-					null
-			);
-
-			fuelStationRepository.save(fuelStation);
-		}
+//		if(fuelStationRepository.count()<=0){
+//			FuelStation fuelStation = new FuelStation(
+//					1,
+//					"Colombo Shed",
+//					"Colombo",
+//					true,
+//					userRepository.getReferenceById(2),
+//					null,
+//					null
+//			);
+//
+//			fuelStationRepository.save(fuelStation);
+//		}
 	}
 
 

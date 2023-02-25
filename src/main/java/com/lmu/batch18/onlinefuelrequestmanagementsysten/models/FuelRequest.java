@@ -1,9 +1,8 @@
 package com.lmu.batch18.onlinefuelrequestmanagementsysten.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -12,7 +11,8 @@ import java.util.Date;
 @Table(name = "fuel_request")
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class FuelRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,7 +21,7 @@ public class FuelRequest {
     @Column(name = "fuel_amount",length = 100)
     private Double fuelAmount;
 
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+//    @JsonFormat(pattern = "dd-MM-yyyy")
     @Column(name = "requested_date",length = 100)
     private Date requestedDate;
 
@@ -44,9 +44,10 @@ public class FuelRequest {
     @Column(name = "vehicleType",length = 100)
     private String vehicleType;
 
-    @ManyToOne
-    @JoinColumn(name="customer_id", nullable=false)
-    private Customer customer;
+//    @ManyToOne
+//    @JoinColumn(name="customer_id", nullable=false)
+//    private User customer;
+     private int userId;
 
     @ManyToOne
     @JoinColumn(name="fuel_station_id", nullable=false)
@@ -55,6 +56,18 @@ public class FuelRequest {
     @ManyToOne
     @JoinColumn(name="vehicle_id", nullable=false)
     private Vehicle vehicle;
+
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    private Date createdDate;
+
+    private String modifiedBy;
+
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    private Date updatedDate;
+
+    @DateTimeFormat(pattern="hh:mm a")
+    private Date scheduleTime;
+
 
 
 
