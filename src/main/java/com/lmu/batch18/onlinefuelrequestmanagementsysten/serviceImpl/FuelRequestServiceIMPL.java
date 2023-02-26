@@ -77,7 +77,10 @@ public class FuelRequestServiceIMPL implements FuelRequestService {
     @Override
     public List<FuelRequestDTO> getFuelRequestsByCustomerId(int userId) {
         return fuelRequestRepository.findByUserId(userId).stream()
-                .map(fuelRequest -> new FuelRequestDTO(fuelRequest.getId(), fuelRequest.getRequestedDate(), fuelRequest.getVehicleType(), fuelRequest.getEligibleQuata(), fuelRequest.getActualQuata(), fuelRequest.isApproval_state()) {
+                .map(fuelRequest -> new FuelRequestDTO(fuelRequest.getId(), fuelRequest.getRequestedDate(),
+                        fuelRequest.getVehicleType(), fuelRequest.getEligibleQuata(), fuelRequest.getActualQuata(),
+                        fuelRequest.isApprovalState(),fuelRequest.getScheduleTime(),fuelRequest.getFuelStation(),
+                        fuelRequest.getFuelAmount(),fuelRequest.isRejectState()) {
                 })
                 .collect(Collectors.toList());
     }
@@ -103,7 +106,10 @@ public class FuelRequestServiceIMPL implements FuelRequestService {
     @Override
     public List<FuelRequestDTO> findAllFuelRequst() {
         return fuelRequestRepository.findAll().stream()
-                .map(fuelRequest -> new FuelRequestDTO(fuelRequest.getId(), fuelRequest.getRequestedDate(), fuelRequest.getVehicleType(), fuelRequest.getEligibleQuata(), fuelRequest.getActualQuata(), fuelRequest.isApproval_state(),fuelRequest.getScheduleTime(),fuelRequest.getFuelStation()) {
+                .map(fuelRequest -> new FuelRequestDTO(fuelRequest.getId(), fuelRequest.getRequestedDate(),
+                        fuelRequest.getVehicleType(), fuelRequest.getEligibleQuata(), fuelRequest.getActualQuata(),
+                        fuelRequest.isApprovalState(),fuelRequest.getScheduleTime(),fuelRequest.getFuelStation(),
+                        fuelRequest.getFuelAmount(),fuelRequest.isRejectState()) {
                 })
                 .collect(Collectors.toList());
     }
@@ -133,5 +139,60 @@ public class FuelRequestServiceIMPL implements FuelRequestService {
             return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
         }
         return new ResponseEntity<>(commonResponse, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> deleteFuelRequestsByRequestId(int fuelRequestId) {
+        CommonResponse commonResponse = new CommonResponse();
+        FuelRequest fuelRequest = fuelRequestRepository.findById(fuelRequestId).get();
+
+        if (fuelRequest == null) {
+
+//            commonResponse.setErrorMessages(Arrays.asList("Not Found Fuel Request Under This ID"));
+            commonResponse.setStatus(CommonConst.NOT_FOUND_RECORD);
+            return new ResponseEntity<>(commonResponse, HttpStatus.NOT_FOUND);
+        } else {
+            fuelRequestRepository.deleteById(fuelRequestId);
+            commonResponse.setStatus(1);
+            commonResponse.setErrorMessages(Arrays.asList("SuccessFully Deleted"));
+            return new ResponseEntity<>(commonResponse, HttpStatus.OK);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> approveFuelRequestsByRequestId(int fuelRequestId) {
+        System.out.println("appr ser id:"+fuelRequestId);
+        CommonResponse commonResponse = new CommonResponse();
+        FuelRequest fuelRequest = fuelRequestRepository.findById(fuelRequestId).get();
+
+        if (fuelRequest == null) {
+
+//            commonResponse.setErrorMessages(Arrays.asList("Not Found Fuel Request Under This ID"));
+            commonResponse.setStatus(CommonConst.NOT_FOUND_RECORD);
+            return new ResponseEntity<>(commonResponse, HttpStatus.NOT_FOUND);
+        } else {
+            fuelRequestRepository.updateApproveById(fuelRequestId);
+            commonResponse.setStatus(1);
+            commonResponse.setErrorMessages(Arrays.asList("SuccessFully Rejected"));
+            return new ResponseEntity<>(commonResponse, HttpStatus.OK);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> rejectFuelRequestsByRequestId(int fuelRequestId) {
+        CommonResponse commonResponse = new CommonResponse();
+        FuelRequest fuelRequest = fuelRequestRepository.findById(fuelRequestId).get();
+
+        if (fuelRequest == null) {
+
+//            commonResponse.setErrorMessages(Arrays.asList("Not Found Fuel Request Under This ID"));
+            commonResponse.setStatus(CommonConst.NOT_FOUND_RECORD);
+            return new ResponseEntity<>(commonResponse, HttpStatus.NOT_FOUND);
+        } else {
+            fuelRequestRepository.updateRejectStatusById(fuelRequestId);
+            commonResponse.setStatus(1);
+            commonResponse.setErrorMessages(Arrays.asList("SuccessFully Rejected"));
+            return new ResponseEntity<>(commonResponse, HttpStatus.OK);
+        }
     }
 }

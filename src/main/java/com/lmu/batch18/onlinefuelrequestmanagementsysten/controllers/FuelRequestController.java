@@ -192,6 +192,52 @@ public class FuelRequestController {
         return responseEntity;
     }
 
+    @DeleteMapping("/delete/{fuelRequestId}")
+    public ResponseEntity<?> deleteFuelRequestByRequstId(@PathVariable("fuelRequestId") int fuelRequestId) {
+        System.out.println("ID:"+fuelRequestId);
+        CommonResponse commonResponse = new CommonResponse();
+        ResponseEntity<?> responseEntity = null;
+        try{
+            responseEntity = fuelRequestService.deleteFuelRequestsByRequestId(fuelRequestId);
+        }catch (Exception ex){
+            commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
+            commonResponse.setErrorMessages(Collections.singletonList(ex.getMessage()));
+            log.error(ex.getMessage());
+            return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
+        }
+        return responseEntity;
+    }
 
+
+    @GetMapping("/approveRequest/{fuelRequestId}")
+    public ResponseEntity<?> approveFuelRequestByRequstId(@PathVariable("fuelRequestId") int fuelRequestId) {
+        System.out.println(" appID:"+fuelRequestId);
+        CommonResponse commonResponse = new CommonResponse();
+        ResponseEntity<?> responseEntity = null;
+        try{
+            responseEntity = fuelRequestService.approveFuelRequestsByRequestId(fuelRequestId);
+        }catch (Exception ex){
+            commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
+            commonResponse.setErrorMessages(Collections.singletonList(ex.getMessage()));
+            log.error(ex.getMessage());
+            return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
+        }
+        return responseEntity;
+    }
+    @GetMapping("/reject/{fuelRequestId}")
+    public ResponseEntity<?> rejectFuelRequestByRequstId(@PathVariable("fuelRequestId") int fuelRequestId) {
+        System.out.println(" rej ID:"+fuelRequestId);
+        CommonResponse commonResponse = new CommonResponse();
+        ResponseEntity<?> responseEntity = null;
+        try{
+            responseEntity = fuelRequestService.rejectFuelRequestsByRequestId(fuelRequestId);
+        }catch (Exception ex){
+            commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
+            commonResponse.setErrorMessages(Collections.singletonList(ex.getMessage()));
+            log.error(ex.getMessage());
+            return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
+        }
+        return responseEntity;
+    }
 
 }
