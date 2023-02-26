@@ -3,6 +3,7 @@ package com.lmu.batch18.onlinefuelrequestmanagementsysten.serviceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.FuelRequestDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.VehicleDTO;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.WeeklyIncomeDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.*;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.repository.*;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.service.FuelRequestService;
@@ -15,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,6 +42,8 @@ public class FuelRequestServiceIMPL implements FuelRequestService {
     @Autowired
     private FuelPriceRepo fuelPriceRepo;
 
+
+    DateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
     @Override
     public ResponseEntity<CommonResponse> saveFuelRequest(FuelRequest fuelRequestDTO) {
         CommonResponse commonResponse = new CommonResponse();
@@ -194,5 +199,11 @@ public class FuelRequestServiceIMPL implements FuelRequestService {
             commonResponse.setErrorMessages(Arrays.asList("SuccessFully Rejected"));
             return new ResponseEntity<>(commonResponse, HttpStatus.OK);
         }
+    }
+
+    @Override
+    public List allIncomeWeekly() {
+            List<Object[]> weeklyIncomeDTOS=  fuelRequestRepository.getAllWeeklyIncome();
+            return weeklyIncomeDTOS;
     }
 }

@@ -239,5 +239,14 @@ public class FuelRequestController {
         }
         return responseEntity;
     }
+    @GetMapping("/allIncome")
+    public List allIncomeWeekly() {
+        CommonResponse commonResponse = new CommonResponse();
+        ResponseEntity<?> responseEntity = null;
+
+           return fuelRequestService.allIncomeWeekly();
+
+    }
+
 
 }

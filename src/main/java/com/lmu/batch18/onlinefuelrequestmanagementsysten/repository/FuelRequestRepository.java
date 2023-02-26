@@ -1,6 +1,7 @@
 package com.lmu.batch18.onlinefuelrequestmanagementsysten.repository;
 
 
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.WeeklyIncomeDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.FuelRequest;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.Vehicle;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -49,4 +50,14 @@ public interface FuelRequestRepository  extends JpaRepository<FuelRequest, Integ
             nativeQuery = true
     )
     void updateRejectStatusById(int fuelRequestId);
+
+    @Transactional
+    @Modifying
+    @Query(
+            value = "SELECT DATE_FORMAT(requested_date, '%Y-%m-%d') as requested_date,SUM(fuel_amount) as daily_income\n" +
+                    "FROM fuel_request \n" +
+                    "GROUP BY DATE_FORMAT(requested_date, '%Y-%m-%d')",
+            nativeQuery = true
+    )
+    List getAllWeeklyIncome();
 }
