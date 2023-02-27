@@ -36,7 +36,7 @@ public class VehicleController {
         }
     }
 
-    @GetMapping("allRegistered/{userId}")
+    @GetMapping("/allRegistered/{userId}")
     public ResponseEntity<CommonResponse> getAllRegisteredVehicles(@PathVariable("userId") String userId) {
         System.out.println(userId);
         CommonResponse commonResponse = new CommonResponse();
@@ -84,7 +84,7 @@ public class VehicleController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CommonResponse> getVehicleById(@PathVariable("id") Long id) {
+    public ResponseEntity<CommonResponse> getVehicleById(@PathVariable("id") int id) {
 
         ResponseEntity<CommonResponse> responseEntity = null;
         CommonResponse commonResponse = new CommonResponse();
@@ -100,7 +100,7 @@ public class VehicleController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CommonResponse> updateVehicle(@PathVariable("id") Long id, @Valid @RequestBody VehicleDTO vehicleDTO) {
+    public ResponseEntity<CommonResponse> updateVehicle(@PathVariable("id") int id, @Valid @RequestBody VehicleDTO vehicleDTO) {
         CommonResponse commonResponse = new CommonResponse();
         try {
             return vehicleService.updateVehicle(id, vehicleDTO);
@@ -113,5 +113,9 @@ public class VehicleController {
 
         }
     }
+
+    @GetMapping("/allRegisteredVehiclesCount")public Integer getAllRegisteredVehiclesCount() {    return vehicleService.allRegisteredVehiclesCount();}
+
+
 
 }

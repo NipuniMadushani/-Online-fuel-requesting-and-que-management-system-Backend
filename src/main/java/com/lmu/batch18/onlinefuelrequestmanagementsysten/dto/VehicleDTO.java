@@ -12,7 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class VehicleDTO {
 
-    private long id;
+    private int id;
     private String vehicleNumber;
     private String chassisNumber;
     private String vehicleType;
@@ -30,7 +30,7 @@ public class VehicleDTO {
     private Date updatedDate;
 
 
-    public VehicleDTO(Long id, String vehicleNumber, String chassisNumber, String vehicleType, String fuelType) {
+    public VehicleDTO(int id, String vehicleNumber, String chassisNumber, String vehicleType, String fuelType) {
     this.id=id;
     this.vehicleNumber=vehicleNumber;
     this.chassisNumber=chassisNumber;
