@@ -8,14 +8,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
 import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
-public interface FuelRequestRepository  extends JpaRepository<FuelRequest, Integer> {
+public interface FuelRequestRepository extends JpaRepository<FuelRequest, Integer> {
 
-//    List<FuelRequest> findByCustomerEquals(Customer u);
+    //    List<FuelRequest> findByCustomerEquals(Customer u);
     List<FuelRequest> findAllByVehicleEquals(Vehicle vehicle);
+
     @Query(
             value = "select * from fuel_request where user_id=?1 order by CASE WHEN updated_date > created_date THEN updated_date\n" +
                     "        ELSE created_date\n" +
@@ -60,4 +62,10 @@ public interface FuelRequestRepository  extends JpaRepository<FuelRequest, Integ
             nativeQuery = true
     )
     List getAllWeeklyIncome();
+
+    @Transactional
+    @Modifying
+    @Query(value = "SELECT DATE_FORMAT(requested_date, '%Y-%m-%d') as requested_date,count(id) as daily_approval_quota " +
+            "FROM fuel_request  where approval_state=true and DATE_FORMAT(requested_date, '%Y-%m-%d') GROUP BY DATE_FORMAT(requested_date, '%Y-%m-%d')", nativeQuery = true)
+    List<Object[]> allTokenRequest();
 }

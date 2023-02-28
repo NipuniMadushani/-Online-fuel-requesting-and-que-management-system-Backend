@@ -206,4 +206,9 @@ public class FuelRequestServiceIMPL implements FuelRequestService {
             List<Object[]> weeklyIncomeDTOS=  fuelRequestRepository.getAllWeeklyIncome();
             return weeklyIncomeDTOS;
     }
+
+    @Override
+    public List allTokenRequest() {
+        List<Object[]> allTokenRequest=  fuelRequestRepository.allTokenRequest();return allTokenRequest;
+    }
 }

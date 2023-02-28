@@ -58,6 +58,7 @@ public class FuelRequestController {
             return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
         }
     }
+
     @GetMapping("/sunday")
     public LocalDateTime getSundayOfThisWeek() {
         LocalDateTime thisWeeksSunday = LocalDateTime.now().with(DayOfWeek.SUNDAY);
@@ -118,14 +119,12 @@ public class FuelRequestController {
                 fuelRequestFilterDTO.setFuelAmount(fuelAmount);
 
             }
-            fuelRequestFilterDTO.setBalanceQuata(fuelRequestFilterDTO.getEligibleQuata()- fuelRequestFilterDTO.getActualQuata());
+            fuelRequestFilterDTO.setBalanceQuata(fuelRequestFilterDTO.getEligibleQuata() - fuelRequestFilterDTO.getActualQuata());
             fuelRequestFilterDTO.setFuelType(vehicle.getFuelType());
             fuelRequestFilterDTO.setVehicleType(vehicle.getVehicleType());
 
             FuelPrice fuelPrice = fuelPriceRepo.findByFuelTypeEquals(fuelRequestFilterDTO.getFuelType());
             fuelRequestFilterDTO.setPricePerLiter(fuelPrice.getPricePerLiter());
-
-
 
 
             commonResponse.setPayload(Collections.singletonList(fuelRequestFilterDTO));
@@ -147,9 +146,9 @@ public class FuelRequestController {
         System.out.println(fuelRequestId);
         CommonResponse commonResponse = new CommonResponse();
         ResponseEntity<?> responseEntity = null;
-        try{
+        try {
             responseEntity = fuelRequestService.getFuelRequestsByRequestId(fuelRequestId);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
             commonResponse.setErrorMessages(Collections.singletonList(ex.getMessage()));
             log.error(ex.getMessage());
@@ -165,7 +164,7 @@ public class FuelRequestController {
         ResponseEntity<?> responseEntity = null;
         CommonResponse commonResponse = new CommonResponse();
         try {
-            List<FuelRequestDTO> fuelRequestDTO=fuelRequestService.findAllFuelRequst();
+            List<FuelRequestDTO> fuelRequestDTO = fuelRequestService.findAllFuelRequst();
             commonResponse.setPayload(Collections.singletonList(fuelRequestDTO));
             return new ResponseEntity<CommonResponse>(commonResponse, HttpStatus.OK);
         } catch (Exception ex) {
@@ -177,7 +176,7 @@ public class FuelRequestController {
     }
 
     @GetMapping("/lastModified/{customerId}")
-    public ResponseEntity<CommonResponse> findLasModified(@PathVariable("customerId") int customerId){
+    public ResponseEntity<CommonResponse> findLasModified(@PathVariable("customerId") int customerId) {
         CommonResponse commonResponse = new CommonResponse();
         ResponseEntity<CommonResponse> responseEntity = null;
         try {
@@ -194,12 +193,12 @@ public class FuelRequestController {
 
     @DeleteMapping("/delete/{fuelRequestId}")
     public ResponseEntity<?> deleteFuelRequestByRequstId(@PathVariable("fuelRequestId") int fuelRequestId) {
-        System.out.println("ID:"+fuelRequestId);
+        System.out.println("ID:" + fuelRequestId);
         CommonResponse commonResponse = new CommonResponse();
         ResponseEntity<?> responseEntity = null;
-        try{
+        try {
             responseEntity = fuelRequestService.deleteFuelRequestsByRequestId(fuelRequestId);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
             commonResponse.setErrorMessages(Collections.singletonList(ex.getMessage()));
             log.error(ex.getMessage());
@@ -211,12 +210,12 @@ public class FuelRequestController {
 
     @GetMapping("/approveRequest/{fuelRequestId}")
     public ResponseEntity<?> approveFuelRequestByRequstId(@PathVariable("fuelRequestId") int fuelRequestId) {
-        System.out.println(" appID:"+fuelRequestId);
+        System.out.println(" appID:" + fuelRequestId);
         CommonResponse commonResponse = new CommonResponse();
         ResponseEntity<?> responseEntity = null;
-        try{
+        try {
             responseEntity = fuelRequestService.approveFuelRequestsByRequestId(fuelRequestId);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
             commonResponse.setErrorMessages(Collections.singletonList(ex.getMessage()));
             log.error(ex.getMessage());
@@ -224,14 +223,15 @@ public class FuelRequestController {
         }
         return responseEntity;
     }
+
     @GetMapping("/reject/{fuelRequestId}")
     public ResponseEntity<?> rejectFuelRequestByRequstId(@PathVariable("fuelRequestId") int fuelRequestId) {
-        System.out.println(" rej ID:"+fuelRequestId);
+        System.out.println(" rej ID:" + fuelRequestId);
         CommonResponse commonResponse = new CommonResponse();
         ResponseEntity<?> responseEntity = null;
-        try{
+        try {
             responseEntity = fuelRequestService.rejectFuelRequestsByRequestId(fuelRequestId);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
             commonResponse.setErrorMessages(Collections.singletonList(ex.getMessage()));
             log.error(ex.getMessage());
@@ -239,13 +239,19 @@ public class FuelRequestController {
         }
         return responseEntity;
     }
+
     @GetMapping("/allIncome")
     public List allIncomeWeekly() {
         CommonResponse commonResponse = new CommonResponse();
         ResponseEntity<?> responseEntity = null;
 
-           return fuelRequestService.allIncomeWeekly();
+        return fuelRequestService.allIncomeWeekly();
 
+    }
+
+    @GetMapping("/allTokenRequest")
+    public List totalTokenRequest() {
+        return fuelRequestService.allTokenRequest();
     }
 
 

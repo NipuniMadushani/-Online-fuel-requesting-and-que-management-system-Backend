@@ -18,4 +18,6 @@ public interface FuelStationService {
     ResponseEntity<CommonResponse> getFuelStationById(int id);
 
     ResponseEntity<CommonResponse> getFillingStationDetailsManagerWise(String userName);
+
+    Integer getAllRegisteredFuelStationCount();
 }

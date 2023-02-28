@@ -114,6 +114,8 @@ public class VehicleController {
         }
     }
 
+    @GetMapping("/allRegisteredVehiclesCount")public Integer getAllRegisteredVehiclesCount() {    return vehicleService.allRegisteredVehiclesCount();}
+
 
 
 }

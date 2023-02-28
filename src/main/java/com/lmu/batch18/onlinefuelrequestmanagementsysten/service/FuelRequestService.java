@@ -26,4 +26,6 @@ public interface FuelRequestService {
     ResponseEntity<?> rejectFuelRequestsByRequestId(int fuelRequestId);
 
     List allIncomeWeekly();
+
+    List allTokenRequest();
 }

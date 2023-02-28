@@ -146,4 +146,9 @@ public class FuelStationServiceIMPL implements FuelStationService {
         return new ResponseEntity<>(commonResponse, HttpStatus.OK);
     }
 
+    @Override
+    public Integer getAllRegisteredFuelStationCount() {
+        return fuelStationRepository.getAllRegisteredFuelStationCount();
+    }
+
 }
