@@ -9,6 +9,8 @@ import com.lmu.batch18.onlinefuelrequestmanagementsysten.service.NewScheduleServ
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class NewScheduleServiceIMPL implements NewScheduleService {
     @Autowired
@@ -34,5 +36,10 @@ public class NewScheduleServiceIMPL implements NewScheduleService {
             }
         }
         return newSchedule1;
+    }
+
+    @Override
+    public List<NewSchedule> getAllNewScheduled(String userId) {
+        return newScheduleRepository.findByUserId(userId);
     }
 }

@@ -28,7 +28,7 @@ public class EmailServiceImpl {
     private final String senderMail = "nipunimadushani52@gmail.com";
     private final String mailSubject = "Fule Station verification code";
 
-    public void sendEmail(String toEmail, String subject, String body){
+    public void sendEmail(String toEmail, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
         try {
 
@@ -38,14 +38,14 @@ public class EmailServiceImpl {
             message.setSubject(subject);
 
             javaMailSender.send(message);
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error(e.getMessage());
         }
         log.info("mail sent successfully..");
     }
 
     public void sendEmailWithTemplate(EmailDTO mail) {
-        MimeMessage mimeMessage =javaMailSender.createMimeMessage();
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
@@ -62,7 +62,7 @@ public class EmailServiceImpl {
         log.info("mail sent successfully..");
     }
 
-    public String getContentFromTemplate(Map< String, Object > model)     {
+    public String getContentFromTemplate(Map<String, Object> model) {
         StringBuffer content = new StringBuffer();
 
         try {
@@ -74,6 +74,35 @@ public class EmailServiceImpl {
         return content.toString();
     }
 
+
+
+    private String getContentFromTemplateForNewSchedule(Map<String, Object> model) {
+
+        StringBuffer content = new StringBuffer();
+        try {
+            content.append(FreeMarkerTemplateUtils.processTemplateIntoString(configuration.getTemplate("emailNewSchedule.flth"), model));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("success..");
+        return content.toString();
+    }
+
+
     public void sendEmailWithTemplateForNewSchedule(EmailDTO mail, String mailSubjectNewSchedule) {
+
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        try {
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+            mimeMessageHelper.setSubject(mailSubject);
+            mimeMessageHelper.setFrom(senderMail);
+            mimeMessageHelper.setTo(mail.getTo());
+            mail.setContent(getContentFromTemplateForNewSchedule(mail.getModel()));
+            mimeMessageHelper.setText(mail.getContent(), true);
+            javaMailSender.send(mimeMessageHelper.getMimeMessage());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        log.info("mail sent successfully..");
     }
 }
