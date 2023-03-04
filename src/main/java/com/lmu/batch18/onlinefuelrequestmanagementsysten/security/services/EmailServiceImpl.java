@@ -73,4 +73,7 @@ public class EmailServiceImpl {
         System.out.println("success..");
         return content.toString();
     }
+
+    public void sendEmailWithTemplateForNewSchedule(EmailDTO mail, String mailSubjectNewSchedule) {
+    }
 }
