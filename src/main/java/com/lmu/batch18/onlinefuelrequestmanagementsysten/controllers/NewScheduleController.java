@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/api/auth/v1/new-schedule")
@@ -34,5 +37,21 @@ public class NewScheduleController {
         }
     }
 
+    @GetMapping("/newSchedule/{userId}")
+    public ResponseEntity<CommonResponse> getAllNewScheduleByUserId(@PathVariable("userId") String userId) {
+        System.out.println(userId);
+        CommonResponse commonResponse = new CommonResponse();
+        try {
+            List<NewSchedule> vehicleDTOS = newScheduleService.getAllNewScheduled(userId);
+            commonResponse.setPayload(Collections.singletonList(vehicleDTOS));
+            return new ResponseEntity<>(commonResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
+            commonResponse.setErrorMessages(Collections.singletonList(e.getMessage()));
+            log.error(e.getMessage());
+            return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
+        }
+    }
 
 }
