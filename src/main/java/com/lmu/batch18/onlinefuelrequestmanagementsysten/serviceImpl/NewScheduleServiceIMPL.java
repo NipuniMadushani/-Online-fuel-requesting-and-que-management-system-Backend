@@ -42,4 +42,15 @@ public class NewScheduleServiceIMPL implements NewScheduleService {
     public List<NewSchedule> getAllNewScheduled(String userId) {
         return newScheduleRepository.findByUserId(userId);
     }
+
+    @Override
+    public String confirmAndMakePayment(Integer requestId) {
+        if(requestId!=0){
+            newScheduleRepository.confirmNewSchedule(requestId);
+            return "Updated";
+        }else{
+            return "Not Updated";
+        }
+
+    }
 }
