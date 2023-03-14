@@ -70,6 +70,9 @@ public class FuelRequest {
 
     private boolean rejectState;
 
+    @Column(name = "consume_state",columnDefinition = "TINYINT default 0")
+    private boolean consumedState;
+
 
 
 

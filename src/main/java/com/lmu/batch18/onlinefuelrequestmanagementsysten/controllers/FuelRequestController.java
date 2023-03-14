@@ -87,7 +87,7 @@ public class FuelRequestController {
         }
     }
 
-    @GetMapping("fuel-request-filter/{vehicleNumber}")
+    @GetMapping("/fuel-request-filter/{vehicleNumber}")
     public ResponseEntity<CommonResponse> fuelRequestFilter(@PathVariable("vehicleNumber") String vehicleNumber) {
         CommonResponse commonResponse = new CommonResponse();
         try {
@@ -181,7 +181,6 @@ public class FuelRequestController {
         ResponseEntity<CommonResponse> responseEntity = null;
         try {
             responseEntity = fuelRequestService.getlastModifiedDate(customerId);
-            System.out.println(responseEntity);
         } catch (Exception ex) {
             commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
             commonResponse.setErrorMessages(Collections.singletonList(ex.getMessage()));
@@ -254,5 +253,20 @@ public class FuelRequestController {
         return fuelRequestService.allTokenRequest();
     }
 
+
+    @PostMapping("/")
+    public ResponseEntity<CommonResponse> updateFuelRequest(@RequestBody FuelRequest fuelRequestDTO) {
+        CommonResponse commonResponse = new CommonResponse();
+        try {
+            return fuelRequestService.updateFuelRequest(fuelRequestDTO);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
+            commonResponse.setErrorMessages(Collections.singletonList(ex.getMessage()));
+            log.error("Error occurred while calling the save fuel request  Method : " + ex.getMessage());
+            return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
+        }
+    }
 
 }

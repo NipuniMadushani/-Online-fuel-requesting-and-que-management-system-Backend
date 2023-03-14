@@ -28,4 +28,6 @@ public interface FuelRequestService {
     List allIncomeWeekly();
 
     List allTokenRequest();
+
+    ResponseEntity<CommonResponse> updateFuelRequest(FuelRequest fuelRequestDTO);
 }

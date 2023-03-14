@@ -47,28 +47,6 @@ public class FuelRequestServiceIMPL implements FuelRequestService {
     @Override
     public ResponseEntity<CommonResponse> saveFuelRequest(FuelRequest fuelRequestDTO) {
         CommonResponse commonResponse = new CommonResponse();
-//        Customer customer = customerRepository.findById(fuelRequestDTO.getCustomerId()).get();
-//        FuelStation fuelStation = fuelStationRepository.findById(fuelRequestDTO.getFuelStationId()).get();
-//        Vehicle vehicle = vehicleRepository.findById(fuelRequestDTO.getVehicleId()).get();
-//        if (customer == null) {
-//            commonResponse.setStatus(CommonConst.EXCEPTION_ERROR);
-//            commonResponse.setErrorMessages(Collections.singletonList("Not found customer"));
-//            return new ResponseEntity<>(commonResponse, HttpStatus.NOT_FOUND);
-//        }
-//        if (fuelStation == null) {
-//            commonResponse.setStatus(CommonConst.EXCEPTION_ERROR);
-//            commonResponse.setErrorMessages(Collections.singletonList("Not found fuel station"));
-//            return new ResponseEntity<>(commonResponse, HttpStatus.NOT_FOUND);
-//        }
-//        if(vehicle == null){
-//            commonResponse.setStatus(CommonConst.EXCEPTION_ERROR);
-//            commonResponse.setErrorMessages(Collections.singletonList("Not found vehicle"));
-//            return new ResponseEntity<>(commonResponse, HttpStatus.NOT_FOUND);
-//        }
-//        fuelRequestDTO.setCustomer(customer);
-//        fuelRequestDTO.setFuelStation(fuelStation);
-//        fuelRequestDTO.setVehicle(vehicle);
-//        FuelRequest fuelRequest = modelMapper.map(fuelRequestDTO, FuelRequest.class);
         fuelRequestDTO.setCreatedDate(new Date());
         fuelRequestDTO.setUpdatedDate(new Date());
         FuelRequest fuelRequest = fuelRequestRepository.save(fuelRequestDTO);
@@ -210,5 +188,26 @@ public class FuelRequestServiceIMPL implements FuelRequestService {
     @Override
     public List allTokenRequest() {
         List<Object[]> allTokenRequest=  fuelRequestRepository.allTokenRequest();return allTokenRequest;
+    }
+
+    @Override
+    public ResponseEntity<CommonResponse> updateFuelRequest(FuelRequest fuelRequestDTO) {
+        CommonResponse commonResponse = new CommonResponse();
+
+        FuelRequest fuelRequestExist=fuelRequestRepository.findById(fuelRequestDTO.getId()).get();
+        if(fuelRequestExist==null){
+            commonResponse.setErrorMessages(Arrays.asList("Not Found Fuel Request Under This ID"));
+            commonResponse.setStatus(CommonConst.NOT_FOUND_RECORD);
+            return new ResponseEntity<>(commonResponse, HttpStatus.NOT_FOUND);
+        }else{
+            fuelRequestDTO.setCreatedDate(fuelRequestExist.getCreatedDate());
+            fuelRequestDTO.setUpdatedDate(new Date());
+            fuelRequestDTO.setId(fuelRequestDTO.getId());
+            FuelRequest fuelRequest = fuelRequestRepository.save(fuelRequestDTO);
+            commonResponse.setPayload(Collections.singletonList(fuelRequest));
+            commonResponse.setStatus(1);
+            return new ResponseEntity<>(commonResponse, HttpStatus.OK);
+        }
+
     }
 }
