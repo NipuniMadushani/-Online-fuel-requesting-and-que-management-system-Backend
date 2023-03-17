@@ -68,4 +68,9 @@ public interface FuelRequestRepository extends JpaRepository<FuelRequest, Intege
     @Query(value = "SELECT DATE_FORMAT(requested_date, '%Y-%m-%d') as requested_date,count(id) as daily_approval_quota " +
             "FROM fuel_request  where approval_state=true and DATE_FORMAT(requested_date, '%Y-%m-%d') GROUP BY DATE_FORMAT(requested_date, '%Y-%m-%d')", nativeQuery = true)
     List<Object[]> allTokenRequest();
+
+    @Transactional
+    @Modifying
+    @Query(value = "update fuel_request  set consume_state=true where id=?1",nativeQuery = true)
+    void updateConsumeStateForFuelRequest(int id);
 }

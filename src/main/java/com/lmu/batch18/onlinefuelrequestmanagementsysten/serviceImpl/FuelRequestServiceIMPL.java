@@ -203,8 +203,9 @@ public class FuelRequestServiceIMPL implements FuelRequestService {
             fuelRequestDTO.setCreatedDate(fuelRequestExist.getCreatedDate());
             fuelRequestDTO.setUpdatedDate(new Date());
             fuelRequestDTO.setId(fuelRequestDTO.getId());
-            FuelRequest fuelRequest = fuelRequestRepository.save(fuelRequestDTO);
-            commonResponse.setPayload(Collections.singletonList(fuelRequest));
+            fuelRequestRepository.updateConsumeStateForFuelRequest(fuelRequestDTO.getId());
+//            FuelRequest fuelRequest = fuelRequestRepository.save(fuelRequestDTO);
+//            commonResponse.setPayload(Collections.singletonList(fuelRequest));
             commonResponse.setStatus(1);
             return new ResponseEntity<>(commonResponse, HttpStatus.OK);
         }

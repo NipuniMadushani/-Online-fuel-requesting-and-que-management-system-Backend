@@ -15,7 +15,7 @@ import java.util.Date;
 public class FuelRequestDTO {
     private int id;
     private Double fuelAmount;
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private Date requestedDate;
     private boolean approval_state;
     private boolean sheduledState;
@@ -39,6 +39,7 @@ public class FuelRequestDTO {
 
     @DateTimeFormat(pattern="hh:mm a")
     private Date scheduleTime;
+    private boolean consumedState;
 
 
     public FuelRequestDTO(int id, Date requestedDate, String vehicleType, Double eligibleQuata, Double actualQuata, boolean approval_state) {

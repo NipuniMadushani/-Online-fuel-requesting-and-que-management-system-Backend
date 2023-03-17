@@ -254,7 +254,7 @@ public class FuelRequestController {
     }
 
 
-    @PostMapping("/")
+    @PutMapping("/")
     public ResponseEntity<CommonResponse> updateFuelRequest(@RequestBody FuelRequest fuelRequestDTO) {
         CommonResponse commonResponse = new CommonResponse();
         try {
