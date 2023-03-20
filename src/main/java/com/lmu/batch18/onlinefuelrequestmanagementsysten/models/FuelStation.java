@@ -64,7 +64,6 @@ public class FuelStation {
     private Set<FuelRequestHistory> fuelRequestHistory;
 
 
-
-
-
+    public FuelStation(int i, String colombo_shed, String colombo, boolean b, User referenceById, Object o, Object o1) {
+    }
 }
