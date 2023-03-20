@@ -18,4 +18,6 @@ public interface VehicleService {
     ResponseEntity<CommonResponse> checkVehicleByVehicleNumber(String vehicleNumber);
 
     ResponseEntity<CommonResponse> checkVehicleByChassisNumber(String chassisNumber);
+
+    Integer allRegisteredVehiclesCount();
 }

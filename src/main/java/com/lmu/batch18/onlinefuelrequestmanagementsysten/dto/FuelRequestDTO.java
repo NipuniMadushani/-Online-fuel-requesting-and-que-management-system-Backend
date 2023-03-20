@@ -15,11 +15,13 @@ import java.util.Date;
 public class FuelRequestDTO {
     private int id;
     private Double fuelAmount;
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private Date requestedDate;
     private boolean approval_state;
     private boolean sheduledState;
     private boolean activeState;
+    private boolean reject_state;
+
     private Double eligibleQuata;
     private Double actualQuata;
     private String vehicleType;
@@ -37,6 +39,7 @@ public class FuelRequestDTO {
 
     @DateTimeFormat(pattern="hh:mm a")
     private Date scheduleTime;
+    private boolean consumedState;
 
 
     public FuelRequestDTO(int id, Date requestedDate, String vehicleType, Double eligibleQuata, Double actualQuata, boolean approval_state) {
@@ -58,6 +61,34 @@ public class FuelRequestDTO {
         this.scheduleTime=scheduleTime;
         this.fuelStation=fuelStation;
     }
+
+    public FuelRequestDTO(int id, Date requestedDate, String vehicleType, Double eligibleQuata, Double actualQuata, boolean approval_state, Double fuelAmount) {
+        this.id=id;
+        this.requestedDate=requestedDate;
+        this.vehicleType=vehicleType;
+        this.eligibleQuata=eligibleQuata;
+        this.actualQuata=actualQuata;
+        this.approval_state=approval_state;
+        this.fuelStation=fuelStation;
+        this.fuelAmount=fuelAmount;
+    }
+
+    public FuelRequestDTO(int id, Date requestedDate, String vehicleType, Double eligibleQuata, Double actualQuata, boolean approvalState, Date scheduleTime, FuelStation fuelStation, Double fuelAmount, boolean rejectState) {
+        this.id=id;
+        this.requestedDate=requestedDate;
+        this.vehicleType=vehicleType;
+        this.eligibleQuata=eligibleQuata;
+        this.actualQuata=actualQuata;
+        this.approval_state=approvalState;
+        this.scheduleTime=scheduleTime;
+        this.fuelStation=fuelStation;
+        this.fuelAmount=fuelAmount;
+        this.reject_state=rejectState;
+
+
+    }
+
+
 
 //    public FuelRequestDTO(int id, Date requestedDate, String vehicleType, FuelStation fuelStation, Double actualQuata, boolean approval_state) {
 //

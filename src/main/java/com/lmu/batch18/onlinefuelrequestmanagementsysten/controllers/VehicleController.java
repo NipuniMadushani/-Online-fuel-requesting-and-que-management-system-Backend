@@ -41,25 +41,25 @@ public class VehicleController {
         System.out.println(userId);
         CommonResponse commonResponse = new CommonResponse();
         try {
-            List<VehicleDTO>vehicleDTOS = vehicleService.getAllRegisteredVehicles(userId);
+            List<VehicleDTO> vehicleDTOS = vehicleService.getAllRegisteredVehicles(userId);
             commonResponse.setPayload(Collections.singletonList(vehicleDTOS));
             return new ResponseEntity<>(commonResponse, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
             commonResponse.setErrorMessages(Collections.singletonList(e.getMessage()));
-            log.error( e.getMessage());
+            log.error(e.getMessage());
             return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
         }
     }
 
     @GetMapping("/vehicleNumberDuplicate/{vehicleNumber}")
-    public ResponseEntity<CommonResponse> checkVehicleByVehicleNumber(@PathVariable("vehicleNumber") String vehicleNumber){
+    public ResponseEntity<CommonResponse> checkVehicleByVehicleNumber(@PathVariable("vehicleNumber") String vehicleNumber) {
         CommonResponse commonResponse = new CommonResponse();
         ResponseEntity<CommonResponse> responseEntity = null;
-        try{
+        try {
             responseEntity = vehicleService.checkVehicleByVehicleNumber(vehicleNumber);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
             commonResponse.setErrorMessages(Collections.singletonList(ex.getMessage()));
             log.error(ex.getMessage());
@@ -69,12 +69,12 @@ public class VehicleController {
     }
 
     @GetMapping("/chassisNumberDuplicate/{chassisNumber}")
-    public ResponseEntity<CommonResponse> checkVehicleByChassisNumber(@PathVariable("chassisNumber") String chassisNumber){
+    public ResponseEntity<CommonResponse> checkVehicleByChassisNumber(@PathVariable("chassisNumber") String chassisNumber) {
         CommonResponse commonResponse = new CommonResponse();
         ResponseEntity<CommonResponse> responseEntity = null;
-        try{
+        try {
             responseEntity = vehicleService.checkVehicleByChassisNumber(chassisNumber);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
             commonResponse.setErrorMessages(Collections.singletonList(ex.getMessage()));
             log.error(ex.getMessage());
@@ -108,10 +108,14 @@ public class VehicleController {
             e.printStackTrace();
             commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
             commonResponse.setErrorMessages(Collections.singletonList(e.getMessage()));
-            log.error( e.getMessage());
+            log.error(e.getMessage());
             return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
 
         }
     }
 
+    @GetMapping("/allRegisteredVehiclesCount")
+    public Integer getAllRegisteredVehiclesCount() {
+        return vehicleService.allRegisteredVehiclesCount();
+    }
 }

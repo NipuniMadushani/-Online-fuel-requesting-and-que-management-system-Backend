@@ -77,7 +77,7 @@ public class FuelStationController {
         CommonResponse commonResponse = new CommonResponse();
         try {
             List<FuelStationDTO> fuelStationDTOS = fuelStationService.getALlFuelStations();
-           // commonResponse.setPayload(Collections.singletonList(fuelStationDTOS));
+            // commonResponse.setPayload(Collections.singletonList(fuelStationDTOS));
             commonResponse.setPayload(Collections.singletonList(fuelStationDTOS));
             return new ResponseEntity<>(commonResponse, HttpStatus.OK);
         } catch (Exception e) {
@@ -98,7 +98,7 @@ public class FuelStationController {
             e.printStackTrace();
             commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
             commonResponse.setErrorMessages(Collections.singletonList(e.getMessage()));
-            log.error( e.getMessage());
+            log.error(e.getMessage());
             return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
 
         }
@@ -120,11 +120,11 @@ public class FuelStationController {
     }
 
     @GetMapping("/manager/{userName}")
-    public ResponseEntity<CommonResponse> getFillingStationDetailsManagerWise(@PathVariable("userName") String  userName) {
+    public ResponseEntity<CommonResponse> getFillingStationDetailsManagerWise(@PathVariable("userName") String userName) {
         ResponseEntity<CommonResponse> responseEntity = null;
         CommonResponse commonResponse = new CommonResponse();
         try {
-            responseEntity= fuelStationService.getFillingStationDetailsManagerWise(userName);
+            responseEntity = fuelStationService.getFillingStationDetailsManagerWise(userName);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,5 +134,11 @@ public class FuelStationController {
             return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
         }
         return responseEntity;
+    }
+
+    @GetMapping("/allRegisteredFuelStationCount")
+    public Integer getAllRegisteredFuelStationCount() {
+        System.out.println(fuelStationService.getALlFuelStations());
+        return fuelStationService.getAllRegisteredFuelStationCount();
     }
 }

@@ -122,4 +122,9 @@ public class VehicleServiceImpl implements VehicleService {
         commonResponse.setStatus(CommonConst.SUCCESS_CODE);
         return new ResponseEntity<>(commonResponse, HttpStatus.OK);
     }
+
+    @Override
+    public Integer allRegisteredVehiclesCount() {
+        return vehicleRepository.allRegisteredVehiclesCount();
+    }
 }

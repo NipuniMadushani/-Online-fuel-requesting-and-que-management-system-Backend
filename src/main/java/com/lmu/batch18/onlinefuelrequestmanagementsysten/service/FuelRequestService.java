@@ -20,4 +20,16 @@ public interface FuelRequestService {
     ResponseEntity<CommonResponse> getlastModifiedDate(int customerId);
 
     String deleteFuelRequest(int requestId);
+
+    ResponseEntity<?> deleteFuelRequestsByRequestId(int fuelRequestId);
+
+    ResponseEntity<?> approveFuelRequestsByRequestId(int fuelRequestId);
+
+    ResponseEntity<?> rejectFuelRequestsByRequestId(int fuelRequestId);
+
+    List allIncomeWeekly();
+
+    List allTokenRequest();
+
+    ResponseEntity<CommonResponse> updateFuelRequest(FuelRequest fuelRequestDTO);
 }

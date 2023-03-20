@@ -25,8 +25,8 @@ public class FuelRequest {
     @Column(name = "requested_date",length = 100)
     private Date requestedDate;
 
-    @Column(name = "approval_state",columnDefinition = "TINYINT default 0")
-    private boolean approval_state;
+    @Column(name = "approval_state")
+    private boolean approvalState;
 
     @Column(name = "sheduled_state",columnDefinition = "TINYINT default 0")
     private boolean sheduledState;
@@ -67,6 +67,11 @@ public class FuelRequest {
 
     @DateTimeFormat(pattern="hh:mm a")
     private Date scheduleTime;
+
+    private boolean rejectState;
+
+    @Column(name = "consume_state",columnDefinition = "TINYINT default 0")
+    private boolean consumedState;
 
 
 
