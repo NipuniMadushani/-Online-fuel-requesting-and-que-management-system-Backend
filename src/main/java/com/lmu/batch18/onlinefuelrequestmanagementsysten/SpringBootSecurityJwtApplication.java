@@ -245,7 +245,7 @@ public class SpringBootSecurityJwtApplication implements CommandLineRunner {
 		}
 
 		if(fuelRequestByFuelStationRepository.count()<=0){
-			FuelStation fuelStation = fuelStationRepository.getReferenceById(11);
+			FuelStation fuelStation = fuelStationRepository.getReferenceById(13);
 			FuelRequestByFuelStation fuelRequestByFuelStation = new FuelRequestByFuelStation(
 					1,
 					2.00,

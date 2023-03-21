@@ -16,9 +16,29 @@ public class SignupRequest {
 
   private Set<String> role;
 
-  @NotBlank
+//  @NotBlank
   @Size(min = 6, max = 40)
   private String password;
+
+  private String nic;
+
+  private String phoneNumber;
+
+  public String getNic() {
+    return nic;
+  }
+
+  public void setNic(String nic) {
+    this.nic = nic;
+  }
+
+  public String getPhoneNumber() {
+    return phoneNumber;
+  }
+
+  public void setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
+  }
 
   public String getUsername() {
     return username;

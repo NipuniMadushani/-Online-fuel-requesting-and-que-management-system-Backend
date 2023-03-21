@@ -1,11 +1,9 @@
 package com.lmu.batch18.onlinefuelrequestmanagementsysten.security.services;
 
-import com.lmu.batch18.onlinefuelrequestmanagementsysten.controllers.AuthController;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.FuelStation;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.NewSchedule;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.User;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.payload.request.EmailDTO;
-import com.lmu.batch18.onlinefuelrequestmanagementsysten.payload.request.SignupRequest;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.util.CommonResponse;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.util.RandomPasswordGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +45,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return UserDetailsImpl.build(user);
     }
 
-    public ResponseEntity<CommonResponse> sendEmail(String email) {
+    public ResponseEntity<CommonResponse> sendEmail(String email, User user) {
 
         CommonResponse commonResponse = new CommonResponse();
         String randomPwd = randomPasswordGenerator.generatePassayPassword();

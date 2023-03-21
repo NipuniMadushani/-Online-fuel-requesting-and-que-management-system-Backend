@@ -3,6 +3,7 @@ package com.lmu.batch18.onlinefuelrequestmanagementsysten.controllers;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.ERole;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.Role;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.User;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.payload.request.EmailDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.payload.request.LoginRequest;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.payload.request.SignupRequest;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.payload.response.JwtResponse;
@@ -10,11 +11,14 @@ import com.lmu.batch18.onlinefuelrequestmanagementsysten.payload.response.Messag
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.repository.RoleRepository;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.repository.UserRepository;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.security.jwt.JwtUtils;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.security.services.EmailServiceImpl;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.security.services.UserDetailsImpl;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.security.services.UserDetailsServiceImpl;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.util.CommonResponse;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.util.RandomPasswordGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,11 +29,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Collections;
-import java.util.HashSet;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.KeyEvent;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
+
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
 
 @CrossOrigin("*")
 @RestController
@@ -53,6 +63,16 @@ public class AuthController {
 
     @Autowired
     UserDetailsServiceImpl userDetailsService;
+    @Autowired
+    private RandomPasswordGenerator randomPasswordGenerator;
+    @Value("${pwdreset.uri}")
+    private String passwordResetUri;
+    @Autowired
+    private EmailServiceImpl emailService;
+
+
+//    public static final String ACCOUNT_SID = System.getenv("ACaac2208b386d4c1c15f13c415399ff7b");
+//    public static final String AUTH_TOKEN = System.getenv("169efa976db7a09cf637f228f15ffc87");
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -75,13 +95,46 @@ public class AuthController {
                 roles));
     }
 
-    @PostMapping("/sendOTPMail/{email}")
-    public ResponseEntity<CommonResponse> emailSendOTP(@PathVariable("email") String email) {
+
+    public ResponseEntity<CommonResponse> emailSendOTP(String email) {
         System.out.println("awa:" + email);
         ResponseEntity<CommonResponse> responseEntity = null;
         CommonResponse commonResponse = new CommonResponse();
         try {
-            responseEntity = userDetailsService.sendEmail(email);
+//            responseEntity = userDetailsService.sendEmail(email);
+        } catch (Exception ex) {
+            commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
+            commonResponse.setErrorMessages(Collections.singletonList(ex.getMessage()));
+            log.error(ex.getMessage());
+            return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
+        }
+        return responseEntity;
+    }
+
+    @PostMapping("/sendOTPSMS/{phoneNo}")
+    public ResponseEntity<CommonResponse> smsSendOTP(@PathVariable("phoneNo") String phoneNo) {
+        ResponseEntity<CommonResponse> responseEntity = null;
+        CommonResponse commonResponse = new CommonResponse();
+        try {
+            StringSelection stringSelection = new StringSelection("Hai nipuni");
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(stringSelection, null);
+
+            Robot robot = new Robot();
+            robot.keyPress(KeyEvent.VK_CONTROL);
+            robot.keyPress(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_CONTROL);
+            robot.keyRelease(KeyEvent.VK_V);
+
+//            responseEntity = userDetailsService.sendEmail(email);
+//            Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+//            Message message = Message.creator(
+//                            new com.twilio.type.PhoneNumber("+94773043064"),//to
+//                            new com.twilio.type.PhoneNumber("+15017122661"), // from
+//                            "Hi there, How Are You")
+//                    .create();
+//
+//            System.out.println(message.getSid());
         } catch (Exception ex) {
             commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
             commonResponse.setErrorMessages(Collections.singletonList(ex.getMessage()));
@@ -108,7 +161,7 @@ public class AuthController {
         // Create new user's account
         User user = new User(signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
+                signUpRequest.getNic(),signUpRequest.getPhoneNumber());
 
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
@@ -141,7 +194,20 @@ public class AuthController {
         }
 
         user.setRoles(roles);
-        userRepository.save(user);
+        String randomPwd = randomPasswordGenerator.generatePassayPassword();
+        EmailDTO mail = new EmailDTO();
+        Map<String, Object> model = new HashMap<>();
+        model.put("firstName", signUpRequest.getUsername());
+        model.put("lastName", "-"
+                + signUpRequest.getNic());
+        model.put("verificationCode", randomPwd);
+        model.put("uri", passwordResetUri);
+
+        mail.setTo(signUpRequest.getEmail());
+        mail.setModel(model);
+        emailService.sendEmailWithTemplate(mail);
+        user.setPassword(encoder.encode(randomPwd));
+        User userSaved = userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
