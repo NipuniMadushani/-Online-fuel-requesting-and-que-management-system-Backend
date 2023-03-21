@@ -16,4 +16,8 @@ public interface FuelRequestByFuelStationService {
     ResponseEntity<CommonResponse> getFuelRequestsByFuelStationId(int fuelStationId);
 
     List<FuelRequestByFuelStation> findAllFuelRequstByFuelStation();
+
+    ResponseEntity<?> approveFuelRequestsByRequestId(int fuelRequestId);
+
+    ResponseEntity<?> rejectFuelRequestsByRequestId(int fuelRequestId);
 }

@@ -1,6 +1,7 @@
 package com.lmu.batch18.onlinefuelrequestmanagementsysten.controllers;
 
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.CustomerDTO;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.FuelConsumeDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.FuelStationDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.repository.RoleRepository;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.service.FuelStationService;
@@ -140,5 +141,22 @@ public class FuelStationController {
     public Integer getAllRegisteredFuelStationCount() {
         System.out.println(fuelStationService.getALlFuelStations());
         return fuelStationService.getAllRegisteredFuelStationCount();
+    }
+
+    @GetMapping("/remainingFuelCount/{id}/{type}")
+    public FuelConsumeDTO getRemainingFuelCount(@PathVariable("id") int id, @PathVariable("type") String type) {
+        ResponseEntity<CommonResponse> responseEntity = null;
+        CommonResponse commonResponse = new CommonResponse();
+        try {
+          return fuelStationService.getRemainingFuelCount(id,type);
+
+        } catch (Exception ex) {
+            commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
+            commonResponse.setErrorMessages(Collections.singletonList(ex.getMessage()));
+            log.error(ex.getMessage());
+            return null;
+//            return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
+        }
+//        return responseEntity;
     }
 }

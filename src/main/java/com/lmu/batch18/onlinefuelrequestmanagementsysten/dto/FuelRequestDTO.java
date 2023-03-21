@@ -41,6 +41,7 @@ public class FuelRequestDTO {
     private Date scheduleTime;
     private boolean consumedState;
 
+    private  String fuelType;
 
     public FuelRequestDTO(int id, Date requestedDate, String vehicleType, Double eligibleQuata, Double actualQuata, boolean approval_state) {
     this.id=id;

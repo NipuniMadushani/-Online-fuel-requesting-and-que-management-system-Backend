@@ -61,6 +61,8 @@ public class FuelRequestByFuelStation {
 
     private boolean rejectState;
 
+    private String fuelType;
+
     public FuelRequestByFuelStation(int id, Double fuelAmount, FuelStation fuelStation) {
         this.id = id;
         this.fuelAmount = fuelAmount;

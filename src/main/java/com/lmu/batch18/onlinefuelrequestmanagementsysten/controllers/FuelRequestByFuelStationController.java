@@ -87,5 +87,36 @@ public class FuelRequestByFuelStationController {
             return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
         }
     }
+    @PostMapping("/approveRequest/{fuelRequestId}")
+    public ResponseEntity<?> approveFuelRequestByRequestId(@PathVariable("fuelRequestId") int fuelRequestId) {
+        System.out.println(" appID:" + fuelRequestId);
+        CommonResponse commonResponse = new CommonResponse();
+        ResponseEntity<?> responseEntity = null;
+        try {
+            responseEntity = fuelRequestByFuelStationService.approveFuelRequestsByRequestId(fuelRequestId);
+        } catch (Exception ex) {
+            commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
+            commonResponse.setErrorMessages(Collections.singletonList(ex.getMessage()));
+            log.error(ex.getMessage());
+            return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
+        }
+        return responseEntity;
+    }
+
+    @PostMapping("/rejectRequest/{fuelRequestId}")
+    public ResponseEntity<?> rejectFuelRequestByRequestId(@PathVariable("fuelRequestId") int fuelRequestId) {
+        System.out.println(" appID:" + fuelRequestId);
+        CommonResponse commonResponse = new CommonResponse();
+        ResponseEntity<?> responseEntity = null;
+        try {
+            responseEntity = fuelRequestByFuelStationService.rejectFuelRequestsByRequestId(fuelRequestId);
+        } catch (Exception ex) {
+            commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
+            commonResponse.setErrorMessages(Collections.singletonList(ex.getMessage()));
+            log.error(ex.getMessage());
+            return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
+        }
+        return responseEntity;
+    }
 
 }

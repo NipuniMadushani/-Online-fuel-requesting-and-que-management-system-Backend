@@ -73,6 +73,8 @@ public class FuelRequest {
     @Column(name = "consume_state",columnDefinition = "TINYINT default 0")
     private boolean consumedState;
 
+    private  String fuelType;
+
 
     public FuelRequest(int id, Double fuelAmount, Date requestedDate, Double actualQuata, FuelStation fuelStation, Vehicle vehicle, boolean consumedState) {
         this.id = id;

@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -26,6 +27,7 @@ public class FuelRequestByFuelStationServiceIMPL implements FuelRequestByFuelSta
 
     @Autowired
     private FuelStationRepository fuelStationRepository;
+
     @Override
     public ResponseEntity<CommonResponse> saveFuelRequestByFuelStation(FuelRequestByFuelStation fuelRequestByFuelStationDTO) {
         CommonResponse commonResponse = new CommonResponse();
@@ -78,5 +80,37 @@ public class FuelRequestByFuelStationServiceIMPL implements FuelRequestByFuelSta
     @Override
     public List<FuelRequestByFuelStation> findAllFuelRequstByFuelStation() {
         return fuelRequestByFuelStationRepository.findAll();
+    }
+
+    @Override
+    public ResponseEntity<?> approveFuelRequestsByRequestId(int fuelRequestId) {
+        CommonResponse commonResponse = new CommonResponse();
+        fuelRequestByFuelStationRepository.updateApproveById(fuelRequestId);
+        FuelRequestByFuelStation fuelRequestByFuelStation = fuelRequestByFuelStationRepository.findById(fuelRequestId).get();
+        FuelStation fuelStation
+                = fuelStationRepository.findById(fuelRequestByFuelStation.getFuelStation().getId()).get();
+
+        if (fuelRequestByFuelStation != null) {
+            if (fuelRequestByFuelStation.getFuelType().equals("Petrol")) {
+                Double finalValue = fuelStation.getPetrolStock() + fuelRequestByFuelStation.getActualQuata();
+                fuelStationRepository.updatePetrolStock(finalValue, fuelRequestByFuelStation.getFuelStation());
+            } else if (fuelRequestByFuelStation.getFuelType().equals("Diesel")) {
+                Double finalValue = fuelStation.getDieselStock() + fuelRequestByFuelStation.getActualQuata();
+                fuelStationRepository.updateDieselStock(finalValue, fuelRequestByFuelStation.getFuelStation());
+            }
+        }
+        commonResponse.setStatus(1);
+        commonResponse.setErrorMessages(Arrays.asList("SuccessFully Approved"));
+        return new ResponseEntity<>(commonResponse, HttpStatus.OK);
+
+    }
+
+    @Override
+    public ResponseEntity<?> rejectFuelRequestsByRequestId(int fuelRequestId) {
+        CommonResponse commonResponse = new CommonResponse();
+        fuelRequestByFuelStationRepository.updateRejectById(fuelRequestId);
+        commonResponse.setStatus(1);
+        commonResponse.setErrorMessages(Arrays.asList("SuccessFully Rejected"));
+        return new ResponseEntity<>(commonResponse, HttpStatus.OK);
     }
 }

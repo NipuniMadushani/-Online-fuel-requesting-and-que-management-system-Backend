@@ -42,4 +42,6 @@ public class FuelRequestByFuelStationDTO {
     private Date scheduleTime;
 
     private boolean rejectState;
+
+    private  String fuelType;
 }
