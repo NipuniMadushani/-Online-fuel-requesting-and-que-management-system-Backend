@@ -74,11 +74,13 @@ public class FuelRequest {
     private boolean consumedState;
 
 
-
-
-
-
-
-
-
+    public FuelRequest(int id, Double fuelAmount, Date requestedDate, Double actualQuata, FuelStation fuelStation, Vehicle vehicle, boolean consumedState) {
+        this.id = id;
+        this.fuelAmount = fuelAmount;
+        this.requestedDate = requestedDate;
+        this.actualQuata = actualQuata;
+        this.fuelStation = fuelStation;
+        this.vehicle = vehicle;
+        this.consumedState = consumedState;
+    }
 }

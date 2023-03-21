@@ -40,6 +40,9 @@ public class SpringBootSecurityJwtApplication implements CommandLineRunner {
 	@Autowired
 	private FuelRequestByFuelStationRepository fuelRequestByFuelStationRepository;
 
+	@Autowired
+	private FuelRequestRepository fuelRequestRepository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBootSecurityJwtApplication.class, args);
 	}
@@ -254,6 +257,31 @@ public class SpringBootSecurityJwtApplication implements CommandLineRunner {
 			fuelRequestByFuelStationRepository.save(fuelRequestByFuelStation);
 
 		}
+
+		if(fuelRequestRepository.count()<=0){
+			FuelStation fuelStation = fuelStationRepository.getReferenceById(11);
+			Vehicle vehicle = vehicleRepository.getReferenceById(1);
+			FuelRequest fuelRequest = new FuelRequest(
+					1,
+					35265.00,
+					new Date(),
+					35.00,
+					fuelStation,
+					vehicle,true
+			);
+			fuelRequestRepository.save(fuelRequest);
+
+			FuelRequest fuelRequest1 = new FuelRequest(
+					1,
+					42265.00,
+					new Date(),
+					50.00,
+					fuelStation,
+					vehicle,true
+			);
+			fuelRequestRepository.save(fuelRequest1);
+		}
+
 	}
 
 

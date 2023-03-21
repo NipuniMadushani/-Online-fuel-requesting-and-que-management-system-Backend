@@ -1,6 +1,7 @@
 package com.lmu.batch18.onlinefuelrequestmanagementsysten.service;
 
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.FuelRequestDTO;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.response.FuelRequestDailyIncomeDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.Customer;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.FuelRequest;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.util.CommonResponse;
@@ -32,4 +33,6 @@ public interface FuelRequestService {
     List allTokenRequest();
 
     ResponseEntity<CommonResponse> updateFuelRequest(FuelRequest fuelRequestDTO);
+
+    FuelRequestDailyIncomeDTO getIncomeByFuelStationId(int fuelstationid);
 }
