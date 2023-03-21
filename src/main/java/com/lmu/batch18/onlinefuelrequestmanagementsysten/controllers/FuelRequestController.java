@@ -1,6 +1,7 @@
 package com.lmu.batch18.onlinefuelrequestmanagementsysten.controllers;
 
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.FuelRequestDTO;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.response.FuelRequestDailyIncomeDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.response.FuelRequestFilterDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.EligibleQuota;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.FuelPrice;
@@ -275,6 +276,15 @@ public class FuelRequestController {
             log.error("Error occurred while calling the save fuel request  Method : " + ex.getMessage());
             return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
         }
+    }
+
+    @GetMapping(
+            path = "/get-daily-income-by-fuel-station-id",
+            params = "fuelstationid"
+    )
+    public FuelRequestDailyIncomeDTO getIncomeByFuelStation(@RequestParam(value = "fuelstationid") int fuelstationid) {
+        FuelRequestDailyIncomeDTO fuelRequestDailyIncome = fuelRequestService.getIncomeByFuelStationId(fuelstationid);
+        return fuelRequestDailyIncome;
     }
 
 }
