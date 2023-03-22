@@ -73,8 +73,13 @@ public class FuelRequest {
     @Column(name = "consume_state",columnDefinition = "TINYINT default 0")
     private boolean consumedState;
 
+    @Column(name = "fuelType",length = 100)
+    private String fuelType;
 
-    public FuelRequest(int id, Double fuelAmount, Date requestedDate, Double actualQuata, FuelStation fuelStation, Vehicle vehicle, boolean consumedState) {
+
+
+
+    public FuelRequest(int id, Double fuelAmount, Date requestedDate, Double actualQuata, FuelStation fuelStation, Vehicle vehicle, boolean consumedState,String fuelType) {
         this.id = id;
         this.fuelAmount = fuelAmount;
         this.requestedDate = requestedDate;
@@ -82,5 +87,6 @@ public class FuelRequest {
         this.fuelStation = fuelStation;
         this.vehicle = vehicle;
         this.consumedState = consumedState;
+        this.fuelType = fuelType;
     }
 }

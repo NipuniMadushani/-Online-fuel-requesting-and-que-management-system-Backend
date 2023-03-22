@@ -1,6 +1,7 @@
 package com.lmu.batch18.onlinefuelrequestmanagementsysten.serviceImpl;
 
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.FuelRequestDTO;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.response.FuelRequestActualQuotaCountDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.response.FuelRequestDailyIncomeDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.FuelRequest;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.FuelStation;
@@ -236,7 +237,30 @@ public class FuelRequestServiceIMPL implements FuelRequestService {
           );
           return m;
 
+    }
 
-
+    @Override
+    public FuelRequestActualQuotaCountDTO getActualQuotaByFuelStationId(int fuelStationId) {
+        double petrolActualCount = 0;
+        double dieselActualCount = 0;
+        FuelStation fuelStation = fuelStationRepository.getReferenceById(fuelStationId);
+        List<FuelRequest> fuelRequest = fuelRequestRepository.findAllByFuelStationAndConsumedState(fuelStation, true);
+        System.out.println("AWA "+ fuelRequest.get(0).getId());
+        for (FuelRequest f : fuelRequest) {
+            if(f.getFuelType().equalsIgnoreCase("PETROL")) {
+                petrolActualCount = petrolActualCount + f.getFuelAmount();
+            }else if(f.getFuelType().equalsIgnoreCase("DIESEL")){
+                dieselActualCount = dieselActualCount + f.getFuelAmount();
+            }else {
+                petrolActualCount = 0;
+                dieselActualCount = 0;
+            }
+        }
+        FuelRequestActualQuotaCountDTO fuelRequestActualQuotaCountDTO = new FuelRequestActualQuotaCountDTO(
+                fuelStationId,
+                petrolActualCount,
+                dieselActualCount
+        );
+        return fuelRequestActualQuotaCountDTO;
     }
 }

@@ -1,6 +1,7 @@
 package com.lmu.batch18.onlinefuelrequestmanagementsysten.controllers;
 
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.FuelRequestDTO;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.response.FuelRequestActualQuotaCountDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.response.FuelRequestDailyIncomeDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.response.FuelRequestFilterDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.EligibleQuota;
@@ -285,6 +286,15 @@ public class FuelRequestController {
     public FuelRequestDailyIncomeDTO getIncomeByFuelStation(@RequestParam(value = "fuelstationid") int fuelstationid) {
         FuelRequestDailyIncomeDTO fuelRequestDailyIncome = fuelRequestService.getIncomeByFuelStationId(fuelstationid);
         return fuelRequestDailyIncome;
+    }
+
+    @GetMapping(
+            path = "/get-actual-quota-count-by-fuel-station-id",
+            params = "fuelstationid"
+    )
+    public FuelRequestActualQuotaCountDTO getActualQuotaByFuelStation(@RequestParam(value = "fuelstationid") int fuelstationid) {
+        FuelRequestActualQuotaCountDTO fuelRequestActualQuotaCountDTO = fuelRequestService.getActualQuotaByFuelStationId(fuelstationid);
+        return fuelRequestActualQuotaCountDTO;
     }
 
 }

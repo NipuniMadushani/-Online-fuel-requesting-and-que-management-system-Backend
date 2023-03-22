@@ -1,6 +1,7 @@
 package com.lmu.batch18.onlinefuelrequestmanagementsysten.service;
 
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.FuelRequestDTO;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.response.FuelRequestActualQuotaCountDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.response.FuelRequestDailyIncomeDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.Customer;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.FuelRequest;
@@ -35,4 +36,6 @@ public interface FuelRequestService {
     ResponseEntity<CommonResponse> updateFuelRequest(FuelRequest fuelRequestDTO);
 
     FuelRequestDailyIncomeDTO getIncomeByFuelStationId(int fuelstationid);
+
+    FuelRequestActualQuotaCountDTO getActualQuotaByFuelStationId(int fuelstationid);
 }
