@@ -23,5 +23,7 @@ public class FuelRequestFilterDTO {
 
     private Vehicle vehicle;
 
+    private boolean consumedState;
+
 
 }

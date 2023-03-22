@@ -102,6 +102,7 @@ public class FuelRequestController {
             fuelRequestFilterDTO.setFuelType(vehicle.getFuelType());
             fuelRequestFilterDTO.setVehicleType(vehicle.getVehicleType());
             fuelRequestFilterDTO.setEligibleQuata(eligibleQuota.getQuota());
+
             fuelRequestFilterDTO.setVehicle(vehicle);
 
             if (fuelRequest.size() <= 0) {
@@ -114,6 +115,7 @@ public class FuelRequestController {
                 for (FuelRequest f : fuelRequest) {
                     count = count + f.getActualQuata();
                     fuelAmount = fuelAmount + f.getFuelAmount();
+                    fuelRequestFilterDTO.setConsumedState(f.isConsumedState());
                 }
 
                 fuelRequestFilterDTO.setActualQuata(count);
