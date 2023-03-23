@@ -39,4 +39,9 @@ public class NewSchedule {
     private String modifiedBy;
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private Date updatedDate;
+    @Column(name = "confirm_state", columnDefinition = "TINYINT default 0")
+    private boolean confirmState;
+    @Column(name = "reject_state", columnDefinition = "TINYINT default 0")
+    private boolean rejectState;
+
 }

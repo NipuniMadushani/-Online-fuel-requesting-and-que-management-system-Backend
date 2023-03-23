@@ -38,6 +38,10 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
 
+  private String nic;
+
+  private String phoneNumber;
+
 //  @OneToOne(mappedBy = "user")
 //  private Customer customer;
 
@@ -45,6 +49,13 @@ public class User {
 //  private FuelStation fuelStation;
 
   public User() {
+  }
+
+  public User(String username, String email, String nic, String phoneNumber) {
+    this.username = username;
+    this.email = email;
+    this.nic = nic;
+    this.phoneNumber = phoneNumber;
   }
 
   public User(int id, String username, String email, String password, Set<Role> roles) {
@@ -99,5 +110,21 @@ public class User {
 
   public void setRoles(Set<Role> roles) {
     this.roles = roles;
+  }
+
+  public String getNic() {
+    return nic;
+  }
+
+  public void setNic(String nic) {
+    this.nic = nic;
+  }
+
+  public String getPhoneNumber() {
+    return phoneNumber;
+  }
+
+  public void setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
   }
 }

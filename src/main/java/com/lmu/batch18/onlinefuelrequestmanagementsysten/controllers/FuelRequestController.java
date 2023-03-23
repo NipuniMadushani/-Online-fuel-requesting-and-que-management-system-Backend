@@ -1,6 +1,7 @@
 package com.lmu.batch18.onlinefuelrequestmanagementsysten.controllers;
 
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.FuelRequestDTO;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.response.FuelRequestDailyIncomeDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.response.FuelRequestFilterDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.EligibleQuota;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.FuelPrice;
@@ -22,7 +23,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-
+    
 @RestController
 @RequestMapping("/api/auth/v1/fuelrequest")
 @CrossOrigin("*")
@@ -87,7 +88,7 @@ public class FuelRequestController {
         }
     }
 
-    @GetMapping("fuel-request-filter/{vehicleNumber}")
+    @GetMapping("/fuel-request-filter/{vehicleNumber}")
     public ResponseEntity<CommonResponse> fuelRequestFilter(@PathVariable("vehicleNumber") String vehicleNumber) {
         CommonResponse commonResponse = new CommonResponse();
         try {
@@ -101,6 +102,7 @@ public class FuelRequestController {
             fuelRequestFilterDTO.setFuelType(vehicle.getFuelType());
             fuelRequestFilterDTO.setVehicleType(vehicle.getVehicleType());
             fuelRequestFilterDTO.setEligibleQuata(eligibleQuota.getQuota());
+
             fuelRequestFilterDTO.setVehicle(vehicle);
 
             if (fuelRequest.size() <= 0) {
@@ -113,6 +115,7 @@ public class FuelRequestController {
                 for (FuelRequest f : fuelRequest) {
                     count = count + f.getActualQuata();
                     fuelAmount = fuelAmount + f.getFuelAmount();
+                    fuelRequestFilterDTO.setConsumedState(f.isConsumedState());
                 }
 
                 fuelRequestFilterDTO.setActualQuata(count);
@@ -181,7 +184,6 @@ public class FuelRequestController {
         ResponseEntity<CommonResponse> responseEntity = null;
         try {
             responseEntity = fuelRequestService.getlastModifiedDate(customerId);
-            System.out.println(responseEntity);
         } catch (Exception ex) {
             commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
             commonResponse.setErrorMessages(Collections.singletonList(ex.getMessage()));
@@ -240,6 +242,14 @@ public class FuelRequestController {
         return responseEntity;
     }
 
+    @DeleteMapping(
+            path = "delete-by-id/{id}"
+    )
+    public String deleteRequest(@PathVariable(value = "id") int requestId) {
+        String deleted = fuelRequestService.deleteFuelRequest(requestId);
+        return deleted;
+    }
+
     @GetMapping("/allIncome")
     public List allIncomeWeekly() {
         CommonResponse commonResponse = new CommonResponse();
@@ -254,5 +264,29 @@ public class FuelRequestController {
         return fuelRequestService.allTokenRequest();
     }
 
+
+    @PutMapping("/")
+    public ResponseEntity<CommonResponse> updateFuelRequest(@RequestBody FuelRequest fuelRequestDTO) {
+        CommonResponse commonResponse = new CommonResponse();
+        try {
+            return fuelRequestService.updateFuelRequest(fuelRequestDTO);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
+            commonResponse.setErrorMessages(Collections.singletonList(ex.getMessage()));
+            log.error("Error occurred while calling the save fuel request  Method : " + ex.getMessage());
+            return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
+        }
+    }
+
+    @GetMapping(
+            path = "/get-daily-income-by-fuel-station-id",
+            params = "fuelstationid"
+    )
+    public FuelRequestDailyIncomeDTO getIncomeByFuelStation(@RequestParam(value = "fuelstationid") int fuelstationid) {
+        FuelRequestDailyIncomeDTO fuelRequestDailyIncome = fuelRequestService.getIncomeByFuelStationId(fuelstationid);
+        return fuelRequestDailyIncome;
+    }
 
 }

@@ -39,11 +39,27 @@ public class NewScheduleController {
 
     @GetMapping("/newSchedule/{userId}")
     public ResponseEntity<CommonResponse> getAllNewScheduleByUserId(@PathVariable("userId") String userId) {
-        System.out.println(userId);
         CommonResponse commonResponse = new CommonResponse();
         try {
             List<NewSchedule> vehicleDTOS = newScheduleService.getAllNewScheduled(userId);
             commonResponse.setPayload(Collections.singletonList(vehicleDTOS));
+            return new ResponseEntity<>(commonResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
+            commonResponse.setErrorMessages(Collections.singletonList(e.getMessage()));
+            log.error(e.getMessage());
+            return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
+        }
+    }
+
+    @PutMapping("/confirmSchedule/{requestId}")
+    public ResponseEntity<CommonResponse> confirmAndMakePayment(@PathVariable("requestId") Integer requestId) {
+        CommonResponse commonResponse = new CommonResponse();
+        System.out.println("reqid :"+requestId);
+        try {
+            String updated= newScheduleService.confirmAndMakePayment(requestId);
+            commonResponse.setPayload(Collections.singletonList(updated));
             return new ResponseEntity<>(commonResponse, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();

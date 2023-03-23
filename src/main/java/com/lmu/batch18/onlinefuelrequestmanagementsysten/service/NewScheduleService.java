@@ -9,4 +9,6 @@ public interface NewScheduleService {
     NewSchedule saveAndSendEmailForNewSchedule(NewSchedule newSchedule);
 
     List<NewSchedule> getAllNewScheduled(String userId);
+
+    String confirmAndMakePayment(Integer requestId);
 }

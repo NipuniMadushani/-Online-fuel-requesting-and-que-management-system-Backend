@@ -1,5 +1,6 @@
 package com.lmu.batch18.onlinefuelrequestmanagementsysten.service;
 
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.FuelConsumeDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.FuelStationDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.util.CommonResponse;
 import org.springframework.http.ResponseEntity;
@@ -20,4 +21,6 @@ public interface FuelStationService {
     ResponseEntity<CommonResponse> getFillingStationDetailsManagerWise(String userName);
 
     Integer getAllRegisteredFuelStationCount();
+
+    FuelConsumeDTO getRemainingFuelCount(int id, String type);
 }

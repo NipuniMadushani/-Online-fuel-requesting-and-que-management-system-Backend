@@ -1,6 +1,7 @@
 package com.lmu.batch18.onlinefuelrequestmanagementsysten.service;
 
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.FuelRequestDTO;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.response.FuelRequestDailyIncomeDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.Customer;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.FuelRequest;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.util.CommonResponse;
@@ -19,6 +20,8 @@ public interface FuelRequestService {
 
     ResponseEntity<CommonResponse> getlastModifiedDate(int customerId);
 
+    String deleteFuelRequest(int requestId);
+
     ResponseEntity<?> deleteFuelRequestsByRequestId(int fuelRequestId);
 
     ResponseEntity<?> approveFuelRequestsByRequestId(int fuelRequestId);
@@ -28,4 +31,8 @@ public interface FuelRequestService {
     List allIncomeWeekly();
 
     List allTokenRequest();
+
+    ResponseEntity<CommonResponse> updateFuelRequest(FuelRequest fuelRequestDTO);
+
+    FuelRequestDailyIncomeDTO getIncomeByFuelStationId(int fuelstationid);
 }

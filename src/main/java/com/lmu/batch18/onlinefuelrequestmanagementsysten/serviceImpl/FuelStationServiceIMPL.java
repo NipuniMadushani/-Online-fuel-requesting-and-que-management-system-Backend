@@ -2,6 +2,8 @@ package com.lmu.batch18.onlinefuelrequestmanagementsysten.serviceImpl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.controllers.AuthController;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.FuelConsumeDTO;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.FuelRequestDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.FuelStationDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.FuelStation;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.payload.request.SignupRequest;
@@ -149,6 +151,27 @@ public class FuelStationServiceIMPL implements FuelStationService {
     @Override
     public Integer getAllRegisteredFuelStationCount() {
         return fuelStationRepository.getAllRegisteredFuelStationCount();
+    }
+
+    @Override
+    public FuelConsumeDTO  getRemainingFuelCount(int id, String type) {
+        double consumedCount=fuelStationRepository.getRemainingFuelCount(id,type);
+      double fullPetrolStock= fuelStationRepository.getPetrolOrDiselStock(id,type);
+      double remainingStock=fullPetrolStock-consumedCount;
+
+        FuelConsumeDTO fuelConsumeDTO = new FuelConsumeDTO();
+//        if(type=="petrol"){
+        fuelConsumeDTO.setConsumePetrol(fuelStationRepository.getRemainingFuelCount(id, type));
+        fuelConsumeDTO.setFullPetrolStock(fullPetrolStock);
+        fuelConsumeDTO.setRemainingPetrol(remainingStock);
+        if (type.equals("petrol")) {
+            fuelConsumeDTO.setPricePerLiter(300);
+        } else {
+            fuelConsumeDTO.setPricePerLiter(225);
+        }
+
+        return fuelConsumeDTO;
+
     }
 
 }

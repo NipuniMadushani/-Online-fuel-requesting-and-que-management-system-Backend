@@ -1,16 +1,14 @@
 package com.lmu.batch18.onlinefuelrequestmanagementsysten.serviceImpl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.FuelRequestDTO;
-import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.VehicleDTO;
-import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.WeeklyIncomeDTO;
-import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.*;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.response.FuelRequestDailyIncomeDTO;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.FuelRequest;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.FuelStation;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.repository.*;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.service.FuelRequestService;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.util.CommonConst;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.util.CommonResponse;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,51 +22,24 @@ import java.util.stream.Collectors;
 @Service
 public class FuelRequestServiceIMPL implements FuelRequestService {
 
+    Map<String, Object> response = new HashMap<>();
+    DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     @Autowired
     private FuelRequestRepository fuelRequestRepository;
-
     @Autowired
     private ModelMapper modelMapper;
-
     @Autowired
     private CustomerRepository customerRepository;
-
     @Autowired
     private FuelStationRepository fuelStationRepository;
-
     @Autowired
     private VehicleRepository vehicleRepository;
-    Map<String, Object> response = new HashMap<>();
     @Autowired
     private FuelPriceRepo fuelPriceRepo;
 
-
-    DateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
     @Override
     public ResponseEntity<CommonResponse> saveFuelRequest(FuelRequest fuelRequestDTO) {
         CommonResponse commonResponse = new CommonResponse();
-//        Customer customer = customerRepository.findById(fuelRequestDTO.getCustomerId()).get();
-//        FuelStation fuelStation = fuelStationRepository.findById(fuelRequestDTO.getFuelStationId()).get();
-//        Vehicle vehicle = vehicleRepository.findById(fuelRequestDTO.getVehicleId()).get();
-//        if (customer == null) {
-//            commonResponse.setStatus(CommonConst.EXCEPTION_ERROR);
-//            commonResponse.setErrorMessages(Collections.singletonList("Not found customer"));
-//            return new ResponseEntity<>(commonResponse, HttpStatus.NOT_FOUND);
-//        }
-//        if (fuelStation == null) {
-//            commonResponse.setStatus(CommonConst.EXCEPTION_ERROR);
-//            commonResponse.setErrorMessages(Collections.singletonList("Not found fuel station"));
-//            return new ResponseEntity<>(commonResponse, HttpStatus.NOT_FOUND);
-//        }
-//        if(vehicle == null){
-//            commonResponse.setStatus(CommonConst.EXCEPTION_ERROR);
-//            commonResponse.setErrorMessages(Collections.singletonList("Not found vehicle"));
-//            return new ResponseEntity<>(commonResponse, HttpStatus.NOT_FOUND);
-//        }
-//        fuelRequestDTO.setCustomer(customer);
-//        fuelRequestDTO.setFuelStation(fuelStation);
-//        fuelRequestDTO.setVehicle(vehicle);
-//        FuelRequest fuelRequest = modelMapper.map(fuelRequestDTO, FuelRequest.class);
         fuelRequestDTO.setCreatedDate(new Date());
         fuelRequestDTO.setUpdatedDate(new Date());
         FuelRequest fuelRequest = fuelRequestRepository.save(fuelRequestDTO);
@@ -84,8 +55,8 @@ public class FuelRequestServiceIMPL implements FuelRequestService {
         return fuelRequestRepository.findByUserId(userId).stream()
                 .map(fuelRequest -> new FuelRequestDTO(fuelRequest.getId(), fuelRequest.getRequestedDate(),
                         fuelRequest.getVehicleType(), fuelRequest.getEligibleQuata(), fuelRequest.getActualQuata(),
-                        fuelRequest.isApprovalState(),fuelRequest.getScheduleTime(),fuelRequest.getFuelStation(),
-                        fuelRequest.getFuelAmount(),fuelRequest.isRejectState()) {
+                        fuelRequest.isApprovalState(), fuelRequest.getScheduleTime(), fuelRequest.getFuelStation(),
+                        fuelRequest.getFuelAmount(), fuelRequest.isRejectState()) {
                 })
                 .collect(Collectors.toList());
     }
@@ -113,8 +84,8 @@ public class FuelRequestServiceIMPL implements FuelRequestService {
         return fuelRequestRepository.findAll().stream()
                 .map(fuelRequest -> new FuelRequestDTO(fuelRequest.getId(), fuelRequest.getRequestedDate(),
                         fuelRequest.getVehicleType(), fuelRequest.getEligibleQuata(), fuelRequest.getActualQuata(),
-                        fuelRequest.isApprovalState(),fuelRequest.getScheduleTime(),fuelRequest.getFuelStation(),
-                        fuelRequest.getFuelAmount(),fuelRequest.isRejectState()) {
+                        fuelRequest.isApprovalState(), fuelRequest.getScheduleTime(), fuelRequest.getFuelStation(),
+                        fuelRequest.getFuelAmount(), fuelRequest.isRejectState()) {
                 })
                 .collect(Collectors.toList());
     }
@@ -147,6 +118,15 @@ public class FuelRequestServiceIMPL implements FuelRequestService {
     }
 
     @Override
+    public String deleteFuelRequest(int requestId) {
+        if (fuelRequestRepository.existsById(requestId)) {
+            fuelRequestRepository.deleteById(requestId);
+            return "deleted successfully " + requestId;
+        }
+        throw new RuntimeException("no data found for that id");
+    }
+
+    @Override
     public ResponseEntity<?> deleteFuelRequestsByRequestId(int fuelRequestId) {
         CommonResponse commonResponse = new CommonResponse();
         FuelRequest fuelRequest = fuelRequestRepository.findById(fuelRequestId).get();
@@ -166,7 +146,7 @@ public class FuelRequestServiceIMPL implements FuelRequestService {
 
     @Override
     public ResponseEntity<?> approveFuelRequestsByRequestId(int fuelRequestId) {
-        System.out.println("appr ser id:"+fuelRequestId);
+        System.out.println("appr ser id:" + fuelRequestId);
         CommonResponse commonResponse = new CommonResponse();
         FuelRequest fuelRequest = fuelRequestRepository.findById(fuelRequestId).get();
 
@@ -203,12 +183,60 @@ public class FuelRequestServiceIMPL implements FuelRequestService {
 
     @Override
     public List allIncomeWeekly() {
-            List<Object[]> weeklyIncomeDTOS=  fuelRequestRepository.getAllWeeklyIncome();
-            return weeklyIncomeDTOS;
+        List<Object[]> weeklyIncomeDTOS = fuelRequestRepository.getAllWeeklyIncome();
+        return weeklyIncomeDTOS;
     }
 
     @Override
     public List allTokenRequest() {
-        List<Object[]> allTokenRequest=  fuelRequestRepository.allTokenRequest();return allTokenRequest;
+        List<Object[]> allTokenRequest = fuelRequestRepository.allTokenRequest();
+        return allTokenRequest;
+    }
+
+    @Override
+    public ResponseEntity<CommonResponse> updateFuelRequest(FuelRequest fuelRequestDTO) {
+        CommonResponse commonResponse = new CommonResponse();
+
+        FuelRequest fuelRequestExist = fuelRequestRepository.findById(fuelRequestDTO.getId()).get();
+        if (fuelRequestExist == null) {
+            commonResponse.setErrorMessages(Arrays.asList("Not Found Fuel Request Under This ID"));
+            commonResponse.setStatus(CommonConst.NOT_FOUND_RECORD);
+            return new ResponseEntity<>(commonResponse, HttpStatus.NOT_FOUND);
+        } else {
+            fuelRequestDTO.setCreatedDate(fuelRequestExist.getCreatedDate());
+            fuelRequestDTO.setUpdatedDate(new Date());
+            fuelRequestDTO.setId(fuelRequestDTO.getId());
+            fuelRequestRepository.updateConsumeStateForFuelRequest(fuelRequestDTO.getId());
+//            FuelRequest fuelRequest = fuelRequestRepository.save(fuelRequestDTO);
+//            commonResponse.setPayload(Collections.singletonList(fuelRequest));
+            commonResponse.setStatus(1);
+            return new ResponseEntity<>(commonResponse, HttpStatus.OK);
+        }
+
+    }
+
+    @Override
+    public FuelRequestDailyIncomeDTO getIncomeByFuelStationId(int fuelStationId) {
+        double income = 0;
+        FuelStation fuelStation = fuelStationRepository.getReferenceById(fuelStationId);
+        List<FuelRequest> fuelRequest = fuelRequestRepository.findAllByFuelStationAndConsumedState(fuelStation, true);
+        System.out.println("awa " + fuelRequest);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+
+
+          for (FuelRequest f : fuelRequest) {
+              if(sdf.format(f.getRequestedDate()).equals(sdf.format(new Date()))) {
+                  income = income + f.getFuelAmount();
+              }
+          }
+          FuelRequestDailyIncomeDTO m = new FuelRequestDailyIncomeDTO(
+                  fuelStationId,
+                  new Date(),
+                  income
+          );
+          return m;
+
+
+
     }
 }
