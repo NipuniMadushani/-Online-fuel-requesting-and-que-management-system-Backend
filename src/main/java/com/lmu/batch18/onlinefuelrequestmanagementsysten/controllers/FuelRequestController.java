@@ -23,7 +23,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-
+    
 @RestController
 @RequestMapping("/api/auth/v1/fuelrequest")
 @CrossOrigin("*")
