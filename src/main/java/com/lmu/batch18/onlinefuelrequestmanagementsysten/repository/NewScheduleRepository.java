@@ -14,12 +14,12 @@ import java.util.List;
 
 @Repository
 public interface NewScheduleRepository extends JpaRepository<NewSchedule, Integer> {
-    @Query(value = "select * from new_schedule where user_id=?1 and confirm_state=false", nativeQuery = true)
+    @Query(value = "select * from new_schedule where user_id=?1 and is_paid=false and confirm_state=false", nativeQuery = true)
     List<NewSchedule> findByUserId(String userId);
 
 
     @Modifying
     @Transactional
-    @Query(value = "update new_schedule set confirm_state=true and is_paid=true where id=?1",nativeQuery = true)
+    @Query(value = "update new_schedule set is_paid=true ,confirm_state=true where id=?1",nativeQuery = true)
     void confirmNewSchedule(Integer requestId);
 }
