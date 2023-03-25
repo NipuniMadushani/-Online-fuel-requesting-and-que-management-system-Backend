@@ -55,6 +55,7 @@ public class NewScheduleController {
 
     @PutMapping("/confirmSchedule/{requestId}")
     public ResponseEntity<CommonResponse> confirmAndMakePayment(@PathVariable("requestId") Integer requestId) {
+        System.out.println(requestId);
         CommonResponse commonResponse = new CommonResponse();
         try {
             String updated= newScheduleService.confirmAndMakePayment(requestId);
