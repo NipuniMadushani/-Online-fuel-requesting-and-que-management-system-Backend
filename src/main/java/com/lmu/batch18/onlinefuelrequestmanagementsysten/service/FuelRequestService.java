@@ -35,4 +35,6 @@ public interface FuelRequestService {
     ResponseEntity<CommonResponse> updateFuelRequest(FuelRequest fuelRequestDTO);
 
     FuelRequestDailyIncomeDTO getIncomeByFuelStationId(int fuelstationid);
+
+    ResponseEntity<?> makePaymentFuelRequestsByRequestId(int fuelRequestId);
 }

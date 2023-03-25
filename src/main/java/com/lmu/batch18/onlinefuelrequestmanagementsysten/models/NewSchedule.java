@@ -44,4 +44,6 @@ public class NewSchedule {
     @Column(name = "reject_state", columnDefinition = "TINYINT default 0")
     private boolean rejectState;
 
+    private  boolean isPaid;
+
 }

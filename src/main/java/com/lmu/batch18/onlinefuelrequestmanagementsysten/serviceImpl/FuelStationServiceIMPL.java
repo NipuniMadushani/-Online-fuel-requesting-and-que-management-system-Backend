@@ -5,8 +5,11 @@ import com.lmu.batch18.onlinefuelrequestmanagementsysten.controllers.AuthControl
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.FuelConsumeDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.FuelRequestDTO;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.dto.FuelStationDTO;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.FuelRequest;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.models.FuelStation;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.payload.request.SignupRequest;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.repository.FuelPriceRepo;
+import com.lmu.batch18.onlinefuelrequestmanagementsysten.repository.FuelRequestRepository;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.repository.FuelStationRepository;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.repository.UserRepository;
 import com.lmu.batch18.onlinefuelrequestmanagementsysten.security.services.UserDetailsServiceImpl;
@@ -39,6 +42,10 @@ public class FuelStationServiceIMPL implements FuelStationService {
     AuthController authController;
 
     Map<String, Object> response = new HashMap<>();
+    @Autowired
+    private FuelPriceRepo fuelPriceRepo;
+    @Autowired
+    private FuelRequestRepository fuelRequestRepository;
 
     @Override
     public ResponseEntity<CommonResponse> saveFuelStation(FuelStationDTO fuelStationDTO) {
@@ -55,6 +62,8 @@ public class FuelStationServiceIMPL implements FuelStationService {
 //            fuelStationDTO.setUser(user);
             FuelStation fuelStation1 = modelMapper.map(fuelStationDTO, FuelStation.class);
             //customer.setUser(user);
+            fuelStation1.setDieselStock(1000);
+            fuelStation1.setPetrolStock(1000);
             FuelStation fuelStationSaved = fuelStationRepository.save(fuelStation1);
             response.put("FuelStation", fuelStationSaved);
             if (fuelStationSaved != null) {
@@ -155,13 +164,40 @@ public class FuelStationServiceIMPL implements FuelStationService {
 
     @Override
     public FuelConsumeDTO  getRemainingFuelCount(int id, String type) {
-        double consumedCount=fuelStationRepository.getRemainingFuelCount(id,type);
-      double fullPetrolStock= fuelStationRepository.getPetrolOrDiselStock(id,type);
-      double remainingStock=fullPetrolStock-consumedCount;
+        FuelStation fuelStation=fuelStationRepository.findById(id).get();
+        System.out.println("fuelStation diesel stock:"+fuelStation.getDieselStock());
+        double consumedCount;
+        double fullPetrolStock = 0;
+        double remainingStock=0;
+        if(fuelStation.getPetrolStock()!=0 || fuelStation.getDieselStock()!=0){
+           // fuel request
+            if(type.equals("petrol")){
+                fullPetrolStock= fuelStationRepository.getPetrolStock(id,type);
+            }else{
+               fullPetrolStock=fuelStationRepository.getDieselStock(id,type);
+            }
+
+            System.out.println("fullPetrolStock:"+fullPetrolStock);
+            List<FuelRequest> fuelRequests=fuelRequestRepository.findByFuelStation(fuelStation);
+            if(!fuelRequests.isEmpty()){
+                consumedCount=fuelStationRepository.getRemainingFuelCount(id,type);
+                System.out.println("consumed count:"+consumedCount);
+            }else{
+                consumedCount=0;
+            }
+             remainingStock=fullPetrolStock-consumedCount;
+            System.out.println("remaining stock:"+remainingStock);
+        }else{
+            consumedCount=0;
+            fullPetrolStock=0;
+            remainingStock=0;
+        }
+
+
 
         FuelConsumeDTO fuelConsumeDTO = new FuelConsumeDTO();
 //        if(type=="petrol"){
-        fuelConsumeDTO.setConsumePetrol(fuelStationRepository.getRemainingFuelCount(id, type));
+        fuelConsumeDTO.setConsumePetrol(consumedCount);
         fuelConsumeDTO.setFullPetrolStock(fullPetrolStock);
         fuelConsumeDTO.setRemainingPetrol(remainingStock);
         if (type.equals("petrol")) {
@@ -169,7 +205,7 @@ public class FuelStationServiceIMPL implements FuelStationService {
         } else {
             fuelConsumeDTO.setPricePerLiter(225);
         }
-
+        System.out.println(fuelConsumeDTO);
         return fuelConsumeDTO;
 
     }

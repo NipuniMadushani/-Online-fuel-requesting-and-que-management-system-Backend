@@ -214,73 +214,73 @@ public class SpringBootSecurityJwtApplication implements CommandLineRunner {
 //			customerRepository.save(customer);
 //		}
 
-		if(vehicleRepository.count()<=0){
-			Vehicle vehicle = new Vehicle(
-					1,
-					"AB1223",
-					"1232343234",
-					"CAR",
-					"PETROL",
-					"Gotabaya",
-					"2",
-					new Date(),
-					"Minod",
-					new Date(),
-					null,
-					null
+//		if(vehicleRepository.count()<=0){
+//			Vehicle vehicle = new Vehicle(
+//					1,
+//					"AB1223",
+//					"1232343234",
+//					"CAR",
+//					"PETROL",
+//					"Gotabaya",
+//					"2",
+//					new Date(),
+//					"Minod",
+//					new Date(),
+//					null,
+//					null
+//
+//			);
+//			vehicleRepository.save(vehicle);
+//		}
 
-			);
-			vehicleRepository.save(vehicle);
-		}
+//		if(fuelStationRepository.count()<=0){
+//			FuelStation fuelStation = new FuelStation(
+//					1,
+//					"Colombo Shed",
+//					"Colombo",
+//					true,
+//					userRepository.getReferenceById(2),
+//					null,
+//					null
+//			);
+//
+//			fuelStationRepository.save(fuelStation);
+//		}
 
-		if(fuelStationRepository.count()<=0){
-			FuelStation fuelStation = new FuelStation(
-					1,
-					"Colombo Shed",
-					"Colombo",
-					true,
-					userRepository.getReferenceById(2),
-					null,
-					null
-			);
+//		if(fuelRequestByFuelStationRepository.count()<=0){
+//			FuelStation fuelStation = fuelStationRepository.getReferenceById(11);
+//			FuelRequestByFuelStation fuelRequestByFuelStation = new FuelRequestByFuelStation(
+//					1,
+//					2.00,
+//					fuelStation
+//			);
+//			fuelRequestByFuelStationRepository.save(fuelRequestByFuelStation);
+//
+//		}
 
-			fuelStationRepository.save(fuelStation);
-		}
-
-		if(fuelRequestByFuelStationRepository.count()<=0){
-			FuelStation fuelStation = fuelStationRepository.getReferenceById(13);
-			FuelRequestByFuelStation fuelRequestByFuelStation = new FuelRequestByFuelStation(
-					1,
-					2.00,
-					fuelStation
-			);
-			fuelRequestByFuelStationRepository.save(fuelRequestByFuelStation);
-
-		}
-
-		if(fuelRequestRepository.count()<=0){
-			FuelStation fuelStation = fuelStationRepository.getReferenceById(11);
-			Vehicle vehicle = vehicleRepository.getReferenceById(1);
-			FuelRequest fuelRequest = new FuelRequest(
-					1,
-					35265.00,
-					new Date(),
-					35.00,
-					fuelStation,
-					vehicle,true
-			);
-			fuelRequestRepository.save(fuelRequest);
-
-			FuelRequest fuelRequest1 = new FuelRequest(
-					1,
-					42265.00,
-					new Date(),
-					50.00,
-					fuelStation,
-					vehicle,true
-			);
-			fuelRequestRepository.save(fuelRequest1);
-		}
+//		if(fuelRequestRepository.count()<=0){
+//			FuelStation fuelStation = fuelStationRepository.getReferenceById(11);
+//			Vehicle vehicle = vehicleRepository.getReferenceById(1);
+//			FuelRequest fuelRequest = new FuelRequest(
+//					1,
+//					35265.00,
+//					new Date(),
+//					35.00,
+//					fuelStation,
+//					vehicle,true
+//			);
+//			fuelRequestRepository.save(fuelRequest);
+//
+//			FuelRequest fuelRequest1 = new FuelRequest(
+//					1,
+//					42265.00,
+//					new Date(),
+//					50.00,
+//					fuelStation,
+//					vehicle,true
+//			);
+//			fuelRequestRepository.save(fuelRequest1);
+//		}
 
 	}
 

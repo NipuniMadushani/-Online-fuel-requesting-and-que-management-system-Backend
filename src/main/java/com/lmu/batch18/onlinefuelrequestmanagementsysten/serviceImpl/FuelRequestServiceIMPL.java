@@ -42,9 +42,17 @@ public class FuelRequestServiceIMPL implements FuelRequestService {
         CommonResponse commonResponse = new CommonResponse();
         fuelRequestDTO.setCreatedDate(new Date());
         fuelRequestDTO.setUpdatedDate(new Date());
+        FuelStation fuelStation=fuelRequestDTO.getFuelStation();
+       if(fuelRequestDTO.getFuelType().equals("diesel")){
+           if(fuelStation.getDieselStock()<10){
+               fuelRequestDTO.setRejectState(true);
+           }
+       }else if(fuelRequestDTO.getFuelType().equals("petrol")){
+           if(fuelStation.getPetrolStock()<10){
+               fuelRequestDTO.setRejectState(true);
+           }
+       }
         FuelRequest fuelRequest = fuelRequestRepository.save(fuelRequestDTO);
-
-
         commonResponse.setPayload(Collections.singletonList(fuelRequest));
         commonResponse.setStatus(1);
         return new ResponseEntity<>(commonResponse, HttpStatus.OK);
@@ -56,7 +64,7 @@ public class FuelRequestServiceIMPL implements FuelRequestService {
                 .map(fuelRequest -> new FuelRequestDTO(fuelRequest.getId(), fuelRequest.getRequestedDate(),
                         fuelRequest.getVehicleType(), fuelRequest.getEligibleQuata(), fuelRequest.getActualQuata(),
                         fuelRequest.isApprovalState(), fuelRequest.getScheduleTime(), fuelRequest.getFuelStation(),
-                        fuelRequest.getFuelAmount(), fuelRequest.isRejectState()) {
+                        fuelRequest.getFuelAmount(), fuelRequest.isRejectState(),fuelRequest.isPaid(),fuelRequest.getVehicle()) {
                 })
                 .collect(Collectors.toList());
     }
@@ -85,7 +93,7 @@ public class FuelRequestServiceIMPL implements FuelRequestService {
                 .map(fuelRequest -> new FuelRequestDTO(fuelRequest.getId(), fuelRequest.getRequestedDate(),
                         fuelRequest.getVehicleType(), fuelRequest.getEligibleQuata(), fuelRequest.getActualQuata(),
                         fuelRequest.isApprovalState(), fuelRequest.getScheduleTime(), fuelRequest.getFuelStation(),
-                        fuelRequest.getFuelAmount(), fuelRequest.isRejectState()) {
+                        fuelRequest.getFuelAmount(), fuelRequest.isRejectState(),fuelRequest.isPaid(),fuelRequest.getVehicle()) {
                 })
                 .collect(Collectors.toList());
     }
@@ -97,7 +105,6 @@ public class FuelRequestServiceIMPL implements FuelRequestService {
         String datetime = null;
         try {
             List<FuelRequest> hotelMains = fuelRequestRepository.findByUserId(customerId);
-            System.out.println(hotelMains);
             if (hotelMains.isEmpty()) {
                 commonResponse.setStatus(-1);
                 commonResponse.setErrorMessages(Collections.singletonList("Not found records"));
@@ -146,7 +153,6 @@ public class FuelRequestServiceIMPL implements FuelRequestService {
 
     @Override
     public ResponseEntity<?> approveFuelRequestsByRequestId(int fuelRequestId) {
-        System.out.println("appr ser id:" + fuelRequestId);
         CommonResponse commonResponse = new CommonResponse();
         FuelRequest fuelRequest = fuelRequestRepository.findById(fuelRequestId).get();
 
@@ -220,7 +226,6 @@ public class FuelRequestServiceIMPL implements FuelRequestService {
         double income = 0;
         FuelStation fuelStation = fuelStationRepository.getReferenceById(fuelStationId);
         List<FuelRequest> fuelRequest = fuelRequestRepository.findAllByFuelStationAndConsumedState(fuelStation, true);
-        System.out.println("awa " + fuelRequest);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 
 
@@ -238,5 +243,23 @@ public class FuelRequestServiceIMPL implements FuelRequestService {
 
 
 
+    }
+
+    @Override
+    public ResponseEntity<?> makePaymentFuelRequestsByRequestId(int fuelRequestId) {
+        CommonResponse commonResponse = new CommonResponse();
+        FuelRequest fuelRequest = fuelRequestRepository.findById(fuelRequestId).get();
+
+        if (fuelRequest == null) {
+
+//            commonResponse.setErrorMessages(Arrays.asList("Not Found Fuel Request Under This ID"));
+            commonResponse.setStatus(CommonConst.NOT_FOUND_RECORD);
+            return new ResponseEntity<>(commonResponse, HttpStatus.NOT_FOUND);
+        } else {
+            fuelRequestRepository.makePaymentFuelRequestsByRequestId(fuelRequestId);
+            commonResponse.setStatus(1);
+            commonResponse.setErrorMessages(Arrays.asList("SuccessFully Rejected"));
+            return new ResponseEntity<>(commonResponse, HttpStatus.OK);
+        }
     }
 }

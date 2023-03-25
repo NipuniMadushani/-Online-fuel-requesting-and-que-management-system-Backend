@@ -40,6 +40,7 @@ public class FuelRequestDTO {
     @DateTimeFormat(pattern="hh:mm a")
     private Date scheduleTime;
     private boolean consumedState;
+    private boolean isPaid;
 
     private  String fuelType;
 
@@ -74,7 +75,7 @@ public class FuelRequestDTO {
         this.fuelAmount=fuelAmount;
     }
 
-    public FuelRequestDTO(int id, Date requestedDate, String vehicleType, Double eligibleQuata, Double actualQuata, boolean approvalState, Date scheduleTime, FuelStation fuelStation, Double fuelAmount, boolean rejectState) {
+    public FuelRequestDTO(int id, Date requestedDate, String vehicleType, Double eligibleQuata, Double actualQuata, boolean approvalState, Date scheduleTime, FuelStation fuelStation, Double fuelAmount, boolean rejectState,boolean isPaid,Vehicle vehicle) {
         this.id=id;
         this.requestedDate=requestedDate;
         this.vehicleType=vehicleType;
@@ -85,6 +86,8 @@ public class FuelRequestDTO {
         this.fuelStation=fuelStation;
         this.fuelAmount=fuelAmount;
         this.reject_state=rejectState;
+        this.isPaid=isPaid;
+        this.vehicle=vehicle;
 
 
     }

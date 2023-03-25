@@ -91,10 +91,10 @@ public class FuelRequestByFuelStationServiceIMPL implements FuelRequestByFuelSta
                 = fuelStationRepository.findById(fuelRequestByFuelStation.getFuelStation().getId()).get();
 
         if (fuelRequestByFuelStation != null) {
-            if (fuelRequestByFuelStation.getFuelType().equals("Petrol")) {
+            if (fuelRequestByFuelStation.getFuelType().equals("petrol")) {
                 Double finalValue = fuelStation.getPetrolStock() + fuelRequestByFuelStation.getActualQuata();
                 fuelStationRepository.updatePetrolStock(finalValue, fuelRequestByFuelStation.getFuelStation());
-            } else if (fuelRequestByFuelStation.getFuelType().equals("Diesel")) {
+            } else if (fuelRequestByFuelStation.getFuelType().equals("diesel")) {
                 Double finalValue = fuelStation.getDieselStock() + fuelRequestByFuelStation.getActualQuata();
                 fuelStationRepository.updateDieselStock(finalValue, fuelRequestByFuelStation.getFuelStation());
             }
