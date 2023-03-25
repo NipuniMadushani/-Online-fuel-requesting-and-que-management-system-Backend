@@ -26,7 +26,7 @@ public class EmailServiceImpl {
     private Configuration configuration;
 
     private final String senderMail = "nipunimadushani52@gmail.com";
-    private final String mailSubject = "Fule Station verification code";
+    private final String mailSubject = "FuelIn-Fule Station verification code";
 
     public void sendEmail(String toEmail, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();

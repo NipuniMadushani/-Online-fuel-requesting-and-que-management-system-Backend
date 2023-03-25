@@ -145,6 +145,7 @@ public class FuelStationController {
 
     @GetMapping("/remainingFuelCount/{id}/{type}")
     public FuelConsumeDTO getRemainingFuelCount(@PathVariable("id") int id, @PathVariable("type") String type) {
+        System.out.println("type:"+type);
         ResponseEntity<CommonResponse> responseEntity = null;
         CommonResponse commonResponse = new CommonResponse();
         try {

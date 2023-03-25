@@ -20,6 +20,6 @@ public interface NewScheduleRepository extends JpaRepository<NewSchedule, Intege
 
     @Modifying
     @Transactional
-    @Query(value = "update new_schedule set confirm_state=true where id=?1",nativeQuery = true)
+    @Query(value = "update new_schedule set confirm_state=true and is_paid=true where id=?1",nativeQuery = true)
     void confirmNewSchedule(Integer requestId);
 }

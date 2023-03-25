@@ -72,7 +72,7 @@ public class FuelRequest {
 
     @Column(name = "consume_state",columnDefinition = "TINYINT default 0")
     private boolean consumedState;
-
+    private boolean isPaid;
     private  String fuelType;
 
 

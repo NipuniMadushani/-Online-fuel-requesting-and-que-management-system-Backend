@@ -23,7 +23,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-    
+
 @RestController
 @RequestMapping("/api/auth/v1/fuelrequest")
 @CrossOrigin("*")
@@ -281,12 +281,26 @@ public class FuelRequestController {
     }
 
     @GetMapping(
-            path = "/get-daily-income-by-fuel-station-id",
-            params = "fuelstationid"
+            path = "/get-daily-income-by-fuel-station-id/{fuelstationid}"
     )
-    public FuelRequestDailyIncomeDTO getIncomeByFuelStation(@RequestParam(value = "fuelstationid") int fuelstationid) {
+    public FuelRequestDailyIncomeDTO getIncomeByFuelStation(@PathVariable(value = "fuelstationid") int fuelstationid) {
         FuelRequestDailyIncomeDTO fuelRequestDailyIncome = fuelRequestService.getIncomeByFuelStationId(fuelstationid);
         return fuelRequestDailyIncome;
+    }
+
+    @PutMapping("/makePayment/{fuelRequestId}")
+    public ResponseEntity<?> makePaymentByRequstId(@PathVariable("fuelRequestId") int fuelRequestId) {
+        CommonResponse commonResponse = new CommonResponse();
+        ResponseEntity<?> responseEntity = null;
+        try {
+            responseEntity = fuelRequestService.makePaymentFuelRequestsByRequestId(fuelRequestId);
+        } catch (Exception ex) {
+            commonResponse.setStatus(HttpStatus.EXPECTATION_FAILED.value());
+            commonResponse.setErrorMessages(Collections.singletonList(ex.getMessage()));
+            log.error(ex.getMessage());
+            return new ResponseEntity<>(commonResponse, HttpStatus.EXPECTATION_FAILED);
+        }
+        return responseEntity;
     }
 
 }
